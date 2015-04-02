@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'foreigner'
 gem 'devise'
 gem 'cancan'
 gem 'angularjs-rails'
