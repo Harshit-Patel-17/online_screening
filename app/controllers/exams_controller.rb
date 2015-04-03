@@ -4,7 +4,7 @@ class ExamsController < ApplicationController
 	def index
 		respond_to do |format|
 			format.html {}
-			format.json {render json: Exam.all}
+			format.json {render json: { exams: Exam.all }}
 		end
 	end
 
@@ -65,7 +65,7 @@ class ExamsController < ApplicationController
 			format.html {}
 			format.json {
 				exam = Exam.find params[:id]
-				if exam.set_test JSON.parse(params[:test])
+				if exam.set_test! JSON.parse(params[:test])
 					message = "Test has been set successfully"
 				else
 					message = "Error in setting test"

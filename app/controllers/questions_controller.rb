@@ -4,7 +4,12 @@ class QuestionsController < ApplicationController
 	def index
 		respond_to do |format|
 			format.html {}
-			format.json {render json: Question.all}
+			format.json {
+				question = Question.select(:id, :question, :weightage)
+				question = question.offset(params[:offset].to_i) if params.has_key? :offset
+				question = question.limit(params[:limit].to_i) if params.has_key? :limit
+				render json: { questions: question }
+			}
 		end
 	end
 

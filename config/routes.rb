@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   post 'exams/:id/set_questions', to: 'exams#set_questions'
   get 'exams/:id/select_questions', to: 'exams#select_questions'
   resources :exams
+
+  resources :answer_sheets
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -10,6 +10,11 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require angular-ng-grid-rails
  *= require_tree .
  *= require_self
  */
+
+.gridStyle {
+	border: 1px solid rgb(212,212,212);	
+}

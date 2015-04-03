@@ -9,6 +9,7 @@
 if User.all.length == 0
 	puts 'Seeding user...'
 	User.create!(email: 'admin@infibeam.net', first_name: 'admin', password: 'infibeam')
+	User.create!(email: 'user@infibeam.net', first_name: 'user', password: 'infibeam')
 end
 
 if Role.all.length == 0
@@ -19,7 +20,10 @@ end
 
 if Privilege.all.length == 0
 	puts 'Seeding privilege...'
-	user_id = User.find_by_email('admin@infibeam.net')[:id]
-	role_id = Role.find_by_role_name('admin')[:id]
-	Privilege.create!(user_id: user_id, role_id: role_id)
+	user_id_admin = User.find_by_email('admin@infibeam.net')[:id]
+	user_id_user = User.find_by_email('user@infibeam.net')[:id]
+	role_id_admin = Role.find_by_role_name('admin')[:id]
+	role_id_user = Role.find_by_role_name('user')[:id]
+	Privilege.create!(user_id: user_id_admin, role_id: role_id_admin)
+	Privilege.create!(user_id: user_id_user, role_id: role_id_user)
 end

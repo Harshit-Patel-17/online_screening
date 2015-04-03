@@ -1,0 +1,1 @@
+angular.module('onlineScreening', ['ui.bootstrap', 'restangular', 'ngGrid']);

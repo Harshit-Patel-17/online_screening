@@ -6,7 +6,7 @@ class CreateExams < ActiveRecord::Migration
 	    t.string   :exam_name
 	    t.date     :date
 	    t.time     :time
-	    t.text   	 :question_count_per_weightage
+	    t.text     :question_count_per_weightage
 	    t.integer  :total_marks
 	    t.string   :status
 	    t.time     :start_window_time

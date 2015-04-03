@@ -1,4 +1,7 @@
 class Question < ActiveRecord::Base
+	has_many  :exam_questions
+	has_many :exams, :through => :exam_questions
+	
 	def self.set question, image
 		q = Question.new(question)
 		if image

@@ -1,7 +1,11 @@
 class Exam < ActiveRecord::Base
+	has_many :exam_questions, :dependent => :delete_all
+	has_many :questions, :through => :exam_questions
+	has_many :answer_sheets, :dependent => :delete_all
+
 	serialize :question_count_per_weightage, JSON
 
-	def set_test test
+	def set_test! test
 		qpw = Question.questions_per_weightage
 		test.each do |key, value|
 			key = key.to_i
