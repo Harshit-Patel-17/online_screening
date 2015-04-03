@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations" }
+
+  get 'questions/questions_per_weightage', to: 'questions#questions_per_weightage'
+  resources :questions 
+
+  post 'exams/:id/set_test', to: 'exams#set_test'
+  post 'exams/:id/set_questions', to: 'exams#set_questions'
+  get 'exams/:id/select_questions', to: 'exams#select_questions'
+  resources :exams
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

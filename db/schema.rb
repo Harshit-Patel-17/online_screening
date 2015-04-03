@@ -11,7 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402120720) do
+ActiveRecord::Schema.define(version: 20150403064358) do
+
+  create_table "exam_questions", force: :cascade do |t|
+    t.integer  "exam_id",     limit: 4
+    t.integer  "question_id", limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "exam_questions", ["exam_id"], name: "index_exam_questions_on_exam_id", using: :btree
+  add_index "exam_questions", ["question_id"], name: "index_exam_questions_on_question_id", using: :btree
+
+  create_table "exams", force: :cascade do |t|
+    t.integer  "duration_mins",                limit: 4
+    t.string   "college_name",                 limit: 255
+    t.string   "exam_name",                    limit: 255
+    t.date     "date"
+    t.time     "time"
+    t.text     "question_count_per_weightage", limit: 65535
+    t.integer  "total_marks",                  limit: 4
+    t.string   "status",                       limit: 255
+    t.time     "start_window_time"
+    t.time     "end_window_time"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
 
   create_table "privileges", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -22,6 +47,20 @@ ActiveRecord::Schema.define(version: 20150402120720) do
 
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
   add_index "privileges", ["user_id"], name: "index_privileges_on_user_id", using: :btree
+
+  create_table "questions", force: :cascade do |t|
+    t.text     "question",                limit: 65535
+    t.text     "options",                 limit: 65535
+    t.string   "answers",                 limit: 255
+    t.integer  "weightage",               limit: 4
+    t.string   "qtype",                   limit: 255
+    t.integer  "no_of_options",           limit: 4
+    t.string   "image",                   limit: 255
+    t.integer  "question_appeared_count", limit: 4,     default: 0
+    t.integer  "correct_response_count",  limit: 4,     default: 0
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string   "role_name",  limit: 255
@@ -55,6 +94,8 @@ ActiveRecord::Schema.define(version: 20150402120720) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "exam_questions", "exams"
+  add_foreign_key "exam_questions", "questions"
   add_foreign_key "privileges", "roles"
   add_foreign_key "privileges", "users"
 end
