@@ -49,7 +49,9 @@ class Question < ActiveRecord::Base
 		name = self.image
 		directory = "public/images"
 		path = File.join(directory, name)
-		File.delete(path)
+		if File.exist? path
+			File.delete(path)
+		end
 		self.image = nil
 		self.save
 	end

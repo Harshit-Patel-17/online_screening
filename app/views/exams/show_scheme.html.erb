@@ -1,0 +1,10 @@
+<div ng-controller="ExamShowSchemeCtrl" ng-init="init(<%= @exam.id %>)">
+	<form action="" enctype="application/json" method="post">
+		<span ng-repeat="(key, value) in qpw">
+			<input type="text" value="{{key}}" disabled></input>
+			<input type="number" name="{{'scheme['+key+']'}}" placeholder="Count for exam" ng-model="scheme[key]"></input>
+			<span>Max: {{value}}</span><br>
+		</span>
+		<button type="submit">Submit</button>
+	</form>
+</div>

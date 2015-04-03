@@ -1,0 +1,13 @@
+<div ng-controller="ExamNewCtrl">
+	<form method="post" action="/exams" enctype="multipart/form-data">
+		<ng-form>
+			<input type="text" name="exam[exam_name]" placeholder="Exam name" required></input>
+			<input type="text" name="exam[college_name]" placeholder="College name" required></input>
+			<input type="date" name="exam[date]" placeholder="Exam date" required></input>
+			<input type="number" name="exam[duration_mins]" placeholder="Exam duration (mins)" required></input>
+			<input type="time" name="exam[start_window_time]" placeholder="Start window time" required></input>
+			<input type="time" name="exam[end_window_time]" placeholder="End window time" required></input>
+		</ng-form>
+		<button type="submit">Submit</button>
+	</form>
+</div>

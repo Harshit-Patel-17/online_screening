@@ -17,14 +17,15 @@ class QuestionsController < ApplicationController
 	end
 
 	def create
-		if Question.set JSON.parse(params[:question]), params[:image]
+		q = Question.set params[:question].symbolize_keys, params[:image]
+		if q
 			message = 'Question successfully created'
 		else
 			message = 'Question creation failed'
 		end
 		respond_to do |format|
-			format.html {}
-			format.json {render json: {reply: message}}
+			format.html { redirect_to question_path(q.id) }
+			format.json { render json: {reply: message, id: q.id} }
 		end
 	end
 
@@ -33,14 +34,14 @@ class QuestionsController < ApplicationController
 
 	def update
 		question = Question.find params[:id]
-		if question.edit! JSON.parse(params[:question]), params[:image]
+		if question.edit! params[:question].symbolize_keys, params[:image]
 			message = 'Question successfully edited'
 		else
 			message = 'Question modification failed'
 		end
 		respond_to do |format|
-			format.html {}
-			format.json {render json: {reply: message}}
+			format.html { redirect_to question_path(params[:id]) }
+			format.json {render json: {reply: message, id: params[:id]}}
 		end
 	end
 
@@ -67,7 +68,8 @@ class QuestionsController < ApplicationController
 	def questions_per_weightage
 		qpw = Question.questions_per_weightage
 		respond_to do |format|
-			format.json {render json: qpw}
+			format.html {render json: {qpw: qpw}}
+			format.json {render json: {qpw: qpw}}
 		end
 	end
 end

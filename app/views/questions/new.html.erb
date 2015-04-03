@@ -1,0 +1,21 @@
+<div ng-controller="QuestionNewCtrl">
+	<form method="post" action="/questions" enctype="multipart/form-data">
+		<ng-form>
+			<textarea name="question[question]" placeholder="Question text" required></textarea>
+			<select name="question[qtype]" ng-model="qtype" required>
+				<option value="" style="display: none">Select question type</option>
+				<option value="mcq">Single correct answer type</option>
+				<option value="multi">Multiple correct answer typr</option>
+				<option value="numerical">Numerical answer type</option>
+			</select>
+			<input type="number" name="question[no_of_options]" placeholder="Total options" ng-model="no_of_options" required></input>
+			<span ng-repeat="index in [] | range: no_of_options">
+				<input type="{{selection_box}}" name="question[answers][]" value="{{index}}"></input>
+				<input type="text" name="question[options][]" placeholder="{{'option '+(index+1)}}" required></input>
+			</span>
+			<input type="number" name="question[weightage]" placeholder="Weightage" required></input>
+			<input type="file" name="image"></input>
+		</ng-form>
+		<button type="submit">Submit</button>
+	</form>
+</div>

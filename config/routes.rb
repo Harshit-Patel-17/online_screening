@@ -4,9 +4,10 @@ Rails.application.routes.draw do
   get 'questions/questions_per_weightage', to: 'questions#questions_per_weightage'
   resources :questions 
 
-  post 'exams/:id/set_test', to: 'exams#set_test'
-  post 'exams/:id/set_questions', to: 'exams#set_questions'
-  get 'exams/:id/select_questions', to: 'exams#select_questions'
+  post 'exams/:id/scheme', to: 'exams#set_scheme'
+  get 'exams/:id/scheme', to: 'exams#show_scheme'
+  post 'exams/:id/questions', to: 'exams#set_questions'
+  get 'exams/:id/questions', to: 'exams#select_questions'
   resources :exams
 
   resources :answer_sheets
