@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 	has_one :privilege
 	has_one :role, through: :privilege
 	has_many :answer_sheets, :dependent => :delete_all
+	belongs_to :college
 	
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403074529) do
+ActiveRecord::Schema.define(version: 20150404182908) do
 
   create_table "answer_sheets", force: :cascade do |t|
     t.integer  "exam_id",       limit: 4
@@ -27,6 +27,23 @@ ActiveRecord::Schema.define(version: 20150403074529) do
 
   add_index "answer_sheets", ["exam_id"], name: "index_answer_sheets_on_exam_id", using: :btree
   add_index "answer_sheets", ["user_id"], name: "index_answer_sheets_on_user_id", using: :btree
+
+  create_table "colleges", force: :cascade do |t|
+    t.string   "institute_name", limit: 255
+    t.string   "branch_name",    limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "exam_colleges", force: :cascade do |t|
+    t.integer  "exam_id",    limit: 4
+    t.integer  "college_id", limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "exam_colleges", ["college_id"], name: "index_exam_colleges_on_college_id", using: :btree
+  add_index "exam_colleges", ["exam_id"], name: "index_exam_colleges_on_exam_id", using: :btree
 
   create_table "exam_questions", force: :cascade do |t|
     t.integer  "exam_id",     limit: 4
@@ -104,15 +121,20 @@ ActiveRecord::Schema.define(version: 20150403074529) do
     t.string   "registration_ip",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "college_id",             limit: 4
   end
 
+  add_index "users", ["college_id"], name: "index_users_on_college_id", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "answer_sheets", "exams"
   add_foreign_key "answer_sheets", "users"
+  add_foreign_key "exam_colleges", "colleges"
+  add_foreign_key "exam_colleges", "exams"
   add_foreign_key "exam_questions", "exams"
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "privileges", "roles"
   add_foreign_key "privileges", "users"
+  add_foreign_key "users", "colleges"
 end

@@ -33,12 +33,31 @@ angular.module('onlineScreening')
    	 		});
    	 	};
 
+   	 	$scope.toggleStatus = function(id, oldStatus){
+   	 		var newStatus;
+   	 		if(oldStatus == 'inactive')
+   	 			newStatus = 'active';
+   	 		else
+   	 			newStatus = 'inactive';
+   	 		var params = {"exam": {"status": newStatus}};
+   	 		$rest.one('exams', id).post('', params)
+   	 		.then(function(data){
+   	 			$scope.getExams();
+   	 		}, function(){
+   	 			alert('Status update request failed.')
+   	 		});
+   	 	};
+
 	    var edit_path = "{{'/exams/'+row.getProperty('id')+'/edit'}}";
 	    var show_path = "{{'/exams/'+row.getProperty('id')}}";
-	    var delete_call = "deleteExam(row.getProperty('id'))"
-	    var linkCellTemplate = '<a href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>'
-	    						+ ' <a href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>'
-	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>';
+	    var delete_call = "deleteExam(row.getProperty('id'))";
+	    var toggle_exam_status_call = "toggleStatus(row.getProperty('id'), row.getProperty('status'))";
+	    var select_college_path = "{{'/exams/'+row.getProperty('id')+'/colleges'}}";
+	    var linkCellTemplate = '<a data-method="get" href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>'
+	    						+ ' <a data-method="get" href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>'
+	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>'
+	    						+ ' <a data-method="get" href="' + select_college_path + '">college</a>';
+	    var statusCellTemplate = '<span>{{row.getProperty("status")}}</span> <a ng-click="'+ toggle_exam_status_call +'"><i class="glyphicon glyphicon-off"></i></a>';
 
 	    $scope.columnDefs = [
 	    	{ field: 'id', displayName: 'Id'},
@@ -48,7 +67,7 @@ angular.module('onlineScreening')
 	    	{ field: 'duration_mins', displayName: 'Duration (mins)'},
 	    	{ field: 'start_window_time', displayName: 'SWT', cellFilter: 'date:\'hh:mm a\''},
 	    	{ field: 'end_window_time', displayName: 'EWT', cellFilter: 'date:\'hh:mm a\''},
-	    	{ field: 'status', displayName: 'Status'},
+	    	{ field: 'status', displayName: 'Status', cellTemplate: statusCellTemplate},
 	    	{ field: 'href', displayName: 'Links', cellTemplate: linkCellTemplate}
 	    ];
 

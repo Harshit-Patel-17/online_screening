@@ -1,6 +1,8 @@
 class Exam < ActiveRecord::Base
 	has_many :exam_questions, :dependent => :delete_all
 	has_many :questions, :through => :exam_questions
+	has_many :exam_colleges, :dependent => :delete_all
+	has_many :colleges, :through => :exam_colleges
 	has_many :answer_sheets, :dependent => :delete_all
 
 	serialize :question_count_per_weightage, JSON
@@ -56,11 +58,29 @@ class Exam < ActiveRecord::Base
 		return true
 	end
 
+	def set_colleges college_ids
+		old_exam_colleges = self.exam_colleges
+		old_exam_colleges.delete_all
+		college_ids.each do |cid|
+			ec = ExamCollege.new
+			ec[:exam_id] = self.id
+			ec[:college_id] = cid
+			ec.save
+		end
+		return true
+	end
+
 	def get_question_count_per_weightage
 		retVal = Hash.new
 		self.question_count_per_weightage.each do |qcpw|
 			retVal[qcpw['weightage']] = qcpw['count']
 		end
 		return retVal
+	end
+
+	def self.get_for_user user_id
+		user = User.find user_id
+		exams = user.college.exams
+		return exams
 	end
 end

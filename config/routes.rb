@@ -9,10 +9,17 @@ Rails.application.routes.draw do
   get 'exams/:id/scheme', to: 'exams#show_scheme'
   post 'exams/:id/questions', to: 'exams#set_questions'
   get 'exams/:id/questions', to: 'exams#select_questions'
+  post 'exams/:id/colleges', to: 'exams#set_colleges'
+  get 'exams/:id/colleges', to: 'exams#select_colleges'
   post 'exams/:id', to: 'exams#update'
   resources :exams
 
   resources :answer_sheets
+
+  post 'colleges/:id', to: 'colleges#update'
+  resources :colleges
+
+  get 'my_exams', to: 'exams#my_exams'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -142,4 +142,46 @@ class ExamsController < ApplicationController
 			format.json {render json: {reply: message}}
 		end
 	end
+
+	def select_colleges
+		@exam = Exam.find params[:id]
+		respond_to do |format|
+			format.html {}
+			format.json {
+				colleges = College.all
+				render json: {colleges: colleges}
+			}
+		end
+	end
+
+	def set_colleges
+		exam = Exam.find params[:id]
+		is_done = exam.set_colleges params[:college_ids]
+		if is_done
+			message = "Colleges successfully set"
+		else
+			message = "Colleges could not be set"
+		end
+		respond_to do |format|
+			format.html {
+				if is_done
+					flash[:notice] = message
+				else
+					flash[:alert] = message
+				end
+				redirect_to exams_path
+			}
+			format.json {render json: {reply: message}}
+		end
+	end
+
+	def my_exams
+		my_exams = Exam.get_for_user current_user.id
+		respond_to do |format|
+			format.html {}
+			format.json {
+				render json: {myExams: my_exams}
+			}
+		end
+	end
 end

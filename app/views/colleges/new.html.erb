@@ -1,0 +1,9 @@
+<div ng-controller="CollegeNewCtrl">
+	<form method="post" action="/colleges" enctype="application/json">
+		<ng-form>
+			<input type="text" name="college[institute_name]" placeholder="College name" required></input>
+			<input type="text" name="college[branch_name]" placeholder="Branch name" required></input>
+		</ng-form>
+		<button type="submit">Submit</button>
+	</form>
+</div>
