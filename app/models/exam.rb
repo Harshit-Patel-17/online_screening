@@ -5,6 +5,14 @@ class Exam < ActiveRecord::Base
 
 	serialize :question_count_per_weightage, JSON
 
+	def self.set exam
+		e = Exam.new exam.symbolize_keys
+		e.status = 'inactive'
+		e.question_count_per_weightage = []
+		e.save
+		e
+	end
+
 	def set_scheme! test
 		old_exam_questions = self.exam_questions
 		old_exam_questions.delete_all
@@ -29,6 +37,8 @@ class Exam < ActiveRecord::Base
 	end
 
 	def set_questions question_ids
+		old_exam_questions = self.exam_questions
+		old_exam_questions.delete_all
 		questions = Question.where('id IN (?)', question_ids)
 		qpw = questions.group(:weightage).count
 		self.question_count_per_weightage.each do |qcpw|

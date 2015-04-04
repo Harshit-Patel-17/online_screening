@@ -12,31 +12,48 @@ class ExamsController < ApplicationController
 	end
 
 	def create
-		e = Exam.new params[:exam].symbolize_keys
-		e.status = 'inactive'
-		if e.save
+		exam = Exam.set params[:exam]
+		if exam
 			message = "Exam successfully created"
 		else
 			message = "Exam creation failed"
 		end
 		respond_to do |format|
-			format.html { redirect_to exam_path(e.id) }
-			format.json {render json: {reply: message, id: e.id}}
+			format.html {
+				if exam
+					flash[:notice] = message 
+					redirect_to "/exams/" + exam.id.to_s + "/scheme" 
+				else
+					flash[:alert] = message
+					redirect_to new_exam_path()
+				end
+			}
+			format.json {render json: {reply: message, id: exam.id}}
 		end
 	end
 
-	def edit	
+	def edit
+		@exam_id = params[:id]	
 	end 
 
 	def update
 		e = Exam.find(params[:id])
-		if e.update params[:exam].symbolize_keys
+		is_done = e.update params[:exam].symbolize_keys
+		if is_done
 			message = "Exam successfully updated"
 		else
 			message = "Exam modification failed"
 		end
 		respond_to do |format|
-			format.html { redirect_to exam_path(e.id) }
+			format.html { 
+				if is_done
+					flash[:notice] = message
+					redirect_to exam_path(e.id) 
+				else
+					flash[:alert] = message
+					redirect_to edit_exam_path(e.id)
+				end
+			}
 			format.json {render json: {reply: message, id: params[:id]}}
 		end
 	end
@@ -45,7 +62,7 @@ class ExamsController < ApplicationController
 		exam = Exam.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: exam}
+			format.json {render json: {exam: exam}}
 		end
 	end
 
@@ -72,13 +89,22 @@ class ExamsController < ApplicationController
 
 	def set_scheme
 		exam = Exam.find params[:id]
-		if exam.set_scheme! params[:scheme]
+		is_done = exam.set_scheme! params[:scheme]
+		if is_done
 			message = "Test has been set successfully"
 		else
 			message = "Error in setting test"
 		end
 		respond_to do |format|
-			format.html { redirect_to "/exams/" + params[:id] + "/questions" }
+			format.html { 
+				if is_done
+					flash[:notice] = message
+					redirect_to "/exams/" + params[:id] + "/questions"
+				else
+					flash[:alert] = message
+					redirect_to "/exams/" + params[:id] + "/scheme"
+				end 
+			}
 			format.json { render json: {reply: message}}
 		end
 	end
@@ -96,12 +122,23 @@ class ExamsController < ApplicationController
 
 	def set_questions
 		exam = Exam.find params[:id]
-		if exam.set_questions params[:question_ids]
+		is_done = exam.set_questions params[:question_ids]
+		if is_done
 			message = "Questions successfully set"
 		else
 			message = "Questions could not be set"
 		end
 		respond_to do |format|
+			format.html {
+				if is_done
+					flash[:notice] = message
+					url = "/exams/" + params[:id] + "/questions" if is_done
+				else
+					flash[:alert] = message
+					url = "/exams/" + params[:id] + "/questions" unless is_done
+				end
+				redirect_to url
+			}
 			format.json {render json: {reply: message}}
 		end
 	end

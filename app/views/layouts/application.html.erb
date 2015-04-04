@@ -4,10 +4,23 @@
   <title>OnlineScreening</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <%= csrf_meta_tags %>
 </head>
 <body ng-app='onlineScreening'>
+
+<% if notice %>	
+<div class="alert alert-success">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	<strong>Note!</strong> <%= notice %>	
+</div>
+<% end %>
+
+<% if alert %>	
+<div class="alert alert-warning">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	<strong>Error!</strong> <%= alert %>	
+</div>
+<% end %>
 
 <%= yield %>
 

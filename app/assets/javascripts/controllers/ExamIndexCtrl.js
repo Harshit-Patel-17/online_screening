@@ -22,6 +22,8 @@ angular.module('onlineScreening')
    	 	};
 
    	 	$scope.deleteExam = function(id){
+   	 		if(!confirm("Are you sure about deleting the exam?"))
+        		return
    	 		$rest.one('exams', id).remove()
    	 		.then(function(data){
    	 			$scope.message = data.reply;
@@ -43,11 +45,11 @@ angular.module('onlineScreening')
 	    	{ field: 'exam_name', displayName: 'Exam Name'},
 	    	{ field: 'college_name', displayName: 'College Name'},
 	    	{ field: 'date', displayName: 'Date'},
-	    	{ field: 'duration_mins', displayName: 'Duration'},
-	    	{ field: 'start_window_time', displayName: 'SWT'},
-	    	{ field: 'end_window_time', displayName: 'EWT'},
+	    	{ field: 'duration_mins', displayName: 'Duration (mins)'},
+	    	{ field: 'start_window_time', displayName: 'SWT', cellFilter: 'date:\'hh:mm a\''},
+	    	{ field: 'end_window_time', displayName: 'EWT', cellFilter: 'date:\'hh:mm a\''},
 	    	{ field: 'status', displayName: 'Status'},
-	    	{ field: 'href', displayName: 'Links', enableCellEdit: false, cellTemplate: linkCellTemplate}
+	    	{ field: 'href', displayName: 'Links', cellTemplate: linkCellTemplate}
 	    ];
 
 	    $scope.getExams();

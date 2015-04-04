@@ -1,1 +1,13 @@
-edit.html.erb
+<div ng-controller="ExamEditCtrl" ng-init="init(<%= @exam_id %>)">
+	<form method="post" action="/exams/<%= @exam_id %>" enctype="multipart/form-data">
+		<ng-form>
+			<input type="text" name="exam[exam_name]" ng-model="exam.exam_name" placeholder="Exam name" required></input>
+			<input type="text" name="exam[college_name]" ng-model="exam.college_name" placeholder="College name" required></input>
+			<input type="date" name="exam[date]" ng-model="exam.date" placeholder="Exam date" required></input>
+			<input type="number" name="exam[duration_mins]" ng-model="exam.duration_mins" placeholder="Exam duration (mins)" required></input>
+			<input type="time" name="exam[start_window_time]" ng-model="exam.start_window_time" placeholder="Start window time" required></input>
+			<input type="time" name="exam[end_window_time]" ng-model="exam.end_window_time" placeholder="End window time" required></input>
+		</ng-form>
+		<button type="submit">Submit</button>
+	</form>
+</div>

@@ -1,8 +1,12 @@
 class Question < ActiveRecord::Base
 	has_many  :exam_questions
 	has_many :exams, :through => :exam_questions
+
+	serialize :options, Array
+	serialize :answers, Array
 	
 	def self.set question, image
+		question = question.symbolize_keys
 		q = Question.new(question)
 		if image
 			q.upload_image! image
@@ -15,6 +19,7 @@ class Question < ActiveRecord::Base
 	end
 
 	def edit! question, image
+		question = question.symbolize_keys
 		q = self
 		if q.image
 			q.delete_image!

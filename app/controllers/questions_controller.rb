@@ -17,30 +17,48 @@ class QuestionsController < ApplicationController
 	end
 
 	def create
-		q = Question.set params[:question].symbolize_keys, params[:image]
-		if q
+		question = Question.set params[:question], params[:image]
+		if question
 			message = 'Question successfully created'
 		else
 			message = 'Question creation failed'
 		end
 		respond_to do |format|
-			format.html { redirect_to question_path(q.id) }
-			format.json { render json: {reply: message, id: q.id} }
+			format.html { 
+				if question
+					flash[:notice] = message
+					redirect_to question_path(question.id)
+				else
+					flash[:alert] = message
+					redirect_to new_question_path()
+				end
+			}
+			format.json { render json: {reply: message, id: question.id} }
 		end
 	end
 
 	def edit
+		@question_id = params[:id]
 	end
 
 	def update
 		question = Question.find params[:id]
-		if question.edit! params[:question].symbolize_keys, params[:image]
+		is_done = question.edit! params[:question], params[:image]
+		if is_done
 			message = 'Question successfully edited'
 		else
 			message = 'Question modification failed'
 		end
 		respond_to do |format|
-			format.html { redirect_to question_path(params[:id]) }
+			format.html { 
+				if is_done
+					flash[:notice] = message
+					redirect_to question_path(params[:id]) 
+				else
+					flash[:alert] = message
+					redirect_to edit_question_path(params[:id])
+				end
+				}
 			format.json {render json: {reply: message, id: params[:id]}}
 		end
 	end
@@ -49,18 +67,20 @@ class QuestionsController < ApplicationController
 		question = Question.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: question}
+			format.json {render json: {question: question}}
 		end
 	end
 
 	def destroy
 		question = Question.find params[:id]
-		if question.remove
+		is_done = question.remove
+		if is_done
 			message = "Question successfully removed"
 		else
 			message = "Error in removing question"
 		end
 		respond_to do |format|
+			format.html {render json: {reply: message}}
 			format.json {render json: {reply: message}}
 		end
 	end

@@ -16,6 +16,18 @@ angular.module('onlineScreening')
 			});
 		};
 
+    $scope.deleteQuestion = function(id){
+      if(!confirm("Are you sure about deleting the question?"))
+        return
+      $rest.one('questions', id).remove()
+      .then(function(data){
+        $scope.message = data.reply;
+        $scope.getPagedQuestions($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+      }, function(){
+        alert('Delete request failed.')
+      });
+    };
+
 		$scope.$watch('pagingOptions', function(){
 			$scope.getPagedQuestions($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
 		}, true);
@@ -38,9 +50,11 @@ angular.module('onlineScreening')
 
     var edit_path = "{{'/questions/'+row.getProperty('id')+'/edit'}}";
     var show_path = "{{'/questions/'+row.getProperty('id')}}";
-    var linkCellTemplate = '<a href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>'
-   							+ ' <a href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>';
-    
+    var delete_call = "deleteQuestion(row.getProperty('id'))"
+    var linkCellTemplate = '<a data-method="get" href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>'
+   							+ ' <a data-method="get" href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>'
+                + ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>';
+
     $scope.columnDefs = [
     	{ field: 'id', displayName: 'Id', width: "10%"},
     	{ field: 'weightage', displayName: 'Weightage', width: "10%"},

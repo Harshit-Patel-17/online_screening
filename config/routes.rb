@@ -2,12 +2,14 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { :registrations => "users/registrations" }
 
   get 'questions/questions_per_weightage', to: 'questions#questions_per_weightage'
+  post 'questions/:id', to: 'questions#update'
   resources :questions 
 
   post 'exams/:id/scheme', to: 'exams#set_scheme'
   get 'exams/:id/scheme', to: 'exams#show_scheme'
   post 'exams/:id/questions', to: 'exams#set_questions'
   get 'exams/:id/questions', to: 'exams#select_questions'
+  post 'exams/:id', to: 'exams#update'
   resources :exams
 
   resources :answer_sheets
