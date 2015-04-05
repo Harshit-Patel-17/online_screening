@@ -53,21 +53,23 @@ angular.module('onlineScreening')
 	    var delete_call = "deleteExam(row.getProperty('id'))";
 	    var toggle_exam_status_call = "toggleStatus(row.getProperty('id'), row.getProperty('status'))";
 	    var select_college_path = "{{'/exams/'+row.getProperty('id')+'/colleges'}}";
+	    var select_question_path = "{{'/exams/'+row.getProperty('id')+'/scheme'}}";
 	    var linkCellTemplate = '<a data-method="get" href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>'
 	    						+ ' <a data-method="get" href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>'
-	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>'
-	    						+ ' <a data-method="get" href="' + select_college_path + '">college</a>';
+	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>';
 	    var statusCellTemplate = '<span>{{row.getProperty("status")}}</span> <a ng-click="'+ toggle_exam_status_call +'"><i class="glyphicon glyphicon-off"></i></a>';
+	    var selectCellTemplate = '<a data-method="get" href="' + select_college_path + '">college</a>'
+	    						 + ' | <a data-method="get" href="' + select_question_path + '">Questions</a>';;
 
 	    $scope.columnDefs = [
 	    	{ field: 'id', displayName: 'Id'},
 	    	{ field: 'exam_name', displayName: 'Exam Name'},
-	    	{ field: 'college_name', displayName: 'College Name'},
 	    	{ field: 'date', displayName: 'Date'},
 	    	{ field: 'duration_mins', displayName: 'Duration (mins)'},
 	    	{ field: 'start_window_time', displayName: 'SWT', cellFilter: 'date:\'hh:mm a\''},
 	    	{ field: 'end_window_time', displayName: 'EWT', cellFilter: 'date:\'hh:mm a\''},
 	    	{ field: 'status', displayName: 'Status', cellTemplate: statusCellTemplate},
+	    	{ field: 'select', displayName: 'Select', cellTemplate: selectCellTemplate},
 	    	{ field: 'href', displayName: 'Links', cellTemplate: linkCellTemplate}
 	    ];
 

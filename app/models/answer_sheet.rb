@@ -1,15 +1,30 @@
 class AnswerSheet < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :exam
-	serialize :answer, JSON
-	serialize :result, JSON 
+	serialize :questions, Array
+	serialize :answers, Array
   
 	def self.set answer_sheet
+		answer_sheet = answer_sheet.symbolize_keys
+		as = AnswerSheet.where('exam_id = ? and user_id = ?', answer_sheet[:exam_id], answer_sheet[:user_id])
+		
+		return as[0] unless as.length == 0
+		
 		as = AnswerSheet.new(answer_sheet)
-		as.start_time = Time.now
 
 		exam_id = as.exam_id
 		exam = Exam.find(exam_id)
+		date = exam.date
+		swt = exam.start_window_time
+		ewt = exam.end_window_time
+		swt = Time.new(date.year, date.month, date.day, swt.hour, swt.min, swt.sec)
+		ewt = Time.new(date.year, date.month, date.day, ewt.hour, ewt.min, ewt.sec)
+		window_active = swt <= Time.now and ewt >= Time.now
+		unless window_active
+			return false
+		end
+		as.start_time = Time.now
+		as.end_time = as.start_time + exam.duration_mins * 60
 		question_ids = exam.exam_questions.select(:question_id)
 
 		qcpw = exam.question_count_per_weightage
@@ -21,11 +36,50 @@ class AnswerSheet < ActiveRecord::Base
 			temp_questions_ids = Question.where('id in (?) and weightage = ?', question_ids, weightage).select(:id)
 			temp_question_ids = temp_questions_ids.shuffle
 			puts temp_question_ids
-			temp_questions_ids[0..count-1].each {|q| questions.push(q.id)}
+			temp_questions_ids[0..count-1].each do |q|
+				questions.push(q.id)
+				answers.push([])
+			end
 		end
 		as.questions = questions
 		as.answers = answers
 		as.save
 		return as
+	end
+
+	def self.calculate_result exam_id, cut_off
+		retValue = []
+		answer_sheets = AnswerSheet.where('exam_id = ?', exam_id)
+		answer_sheets.each do |as|
+			if as.score != nil
+				next
+			end
+			score = 0
+			question_ids = as.questions
+			question_ids.each_with_index do |qid, index|
+				question = Question.find(qid)
+				actual_answers = question.answers.sort
+				given_answers = as.answers[index].sort
+				if actual_answers == given_answers
+					score = score + question.weightage
+				end
+			end
+			as.score = score
+			as.save
+		end
+
+		if cut_off
+			answer_sheets = answer_sheets.where('score <= ?', cut_off)
+		end
+
+		answer_sheets.each do |as|
+			user = User.find as.user_id
+			answer_sheet_json = as.as_json
+			user_name = user.first_name + ' '
+			user_name = user_name + user.last_name if user.last_name
+			answer_sheet_json[:user_name] = user_name
+			retValue.push(answer_sheet_json)
+		end
+		retValue
 	end
 end

@@ -16,7 +16,10 @@ angular.module('onlineScreening')
 		};
 		
 		$scope.startTime = {};
+		$scope.endTime = {};
 		$scope.remainingTime = {};
+		$scope.remainingSecs = {};
+		$scope.windowOver = {};
 		$scope.initStartTime = function(){
 			var date;
 			var time;
@@ -30,6 +33,16 @@ angular.module('onlineScreening')
 				hours = time.getHours();
 				minutes = time.getMinutes();
 				$scope.startTime[$scope.myExams[i].id] = new Date(year, month, day, hours, minutes);
+
+				date = new Date($scope.myExams[i].date);
+				time = new Date($scope.myExams[i].end_window_time);
+
+				year = date.getFullYear();
+				month = date.getMonth();
+				day = date.getDate();
+				hours = time.getHours();
+				minutes = time.getMinutes();
+				$scope.endTime[$scope.myExams[i].id] = new Date(year, month, day, hours, minutes);
 			}	
 			$timeout($scope.refreshTime, 1000);
 		};
@@ -46,11 +59,22 @@ angular.module('onlineScreening')
 		$scope.refreshTime = function(){
 			for(i = 0; i < $scope.myExams.length; i++){
 				key = $scope.myExams[i].id;
-				seconds = $scope.startTime[key] - Date.now();
+				$scope.remainingSecs[key] = $scope.startTime[key] - Date.now();
 				$scope.remainingTime[key] = new Date();
-				$scope.remainingTime[key] = $scope.secondsToHMS(seconds/1000);
+				$scope.remainingTime[key] = $scope.secondsToHMS($scope.remainingSecs[key]/1000);
+				$scope.windowOver[key] = $scope.endTime[key] - Date.now() < 0;
 			}
 			$timeout($scope.refreshTime, 1000);
+		};
+
+		$scope.startExam = function(exam_id){
+			params = {"answer_sheet": {"exam_id": exam_id}};
+			$rest.all('answer_sheets.json').post(params)
+			.then(function(data){
+				window.location.href = "/answer_sheets/" + data.id;
+			}, function(){
+				alert("Start exam request failed.");
+			});
 		};
 
 		$scope.gridOptions = {
@@ -60,8 +84,9 @@ angular.module('onlineScreening')
 	      plugins: [new ngGridFlexibleHeightPlugin()]
    	 	};
 
-	    var edit_path = "{{'/exams/'+row.getProperty('id')+'/edit'}}";
-	    var linkCellTemplate = '<a data-method="get" href="'+ edit_path +'"><i class="glyphicon glyphicon-cog"></i></a>';
+	    var start_exam_call = "startExam(row.getProperty('id'))";
+	    var linkCellTemplate = '<a ng-show="remainingSecs[' + "row.getProperty('id')" + '] <= 0 && !windowOver[' + "row.getProperty('id')" + ']" ng-click="'+ start_exam_call +'">start</a>'
+	    						+ '<span ng-show="windowOver[' + "row.getProperty('id')" + ']">Window over</span>';
 	    var timerCellTemplate = '<span>{{remainingTime[' + 'row.getProperty("id")' + ']}}</span>';
 
 	    $scope.columnDefs = [

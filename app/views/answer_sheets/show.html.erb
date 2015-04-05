@@ -1,0 +1,12 @@
+<div ng-controller="AnswerSheetShowCtrl" ng-init="init(<%= @answer_sheet.id %>)">
+	<div>{{timer.mins + ':' + timer.secs}}</div>
+	<div>{{question.question}}</div>
+	<div ng-repeat="option in question.options track by $index">
+		<input ng-if="question.qtype=='mcq'" type="radio"  name="options" ng-model="answer.radio" value="{{$index}}">
+		<input ng-if="question.qtype=='multi'" type="checkbox"  name="options" ng-model="answer.checkboxes[$index]" value="{{$index}}">
+			{{option}}
+		</input>
+	</div>
+	<button type='button' ng-click="nextQuestion()" ng-disabled="!nextEnabled">Next</button>
+	<button type='button' ng-click="prevQuestion()" ng-disabled="!prevEnabled">Previous</button>
+</div>

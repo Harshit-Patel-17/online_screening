@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150404182908) do
+ActiveRecord::Schema.define(version: 20150405163511) do
 
   create_table "answer_sheets", force: :cascade do |t|
     t.integer  "exam_id",       limit: 4
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20150404182908) do
     t.string   "start_test_ip", limit: 255
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.datetime "end_time"
   end
 
   add_index "answer_sheets", ["exam_id"], name: "index_answer_sheets_on_exam_id", using: :btree

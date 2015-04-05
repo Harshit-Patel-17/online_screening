@@ -4,7 +4,7 @@ class AnswerSheetsController < ApplicationController
 	def index
 		respond_to do |format|
 			format.html {}
-			format.json {render json: AnswerSheet.all}
+			format.json {render json: {answerSheets: AnswerSheet.calculate_result(params[:exam_id], params[:cut_off])}}
 		end
 	end
 
@@ -12,14 +12,29 @@ class AnswerSheetsController < ApplicationController
 	end
 
 	def create
-		if AnswerSheet.set JSON.parse(params[:answer_sheet])
+		params[:answer_sheet][:user_id] = current_user.id
+		params[:answer_sheet][:start_test_ip] = request.remote_ip
+		answer_sheet = AnswerSheet.set params[:answer_sheet]
+		if answer_sheet
 			message = 'AnswerSheet successfully created'
 		else
 			message = 'AnswerSheet creation failed'
 		end
 		respond_to do |format|
-			format.html {}
-			format.json {render json: {reply: message}}
+			format.html {
+				if answer_sheet
+					if answer_sheet.end_time >= Time.now
+						redirect_to answer_sheet_path(answer_sheet.id)
+					else
+						redirect_to "/answer_sheets/time_up"
+					end
+				else
+					redirect_to "/exams/my_exams"
+				end
+			}
+			format.json {
+				render json: {reply: message, id: answer_sheet.id}
+			}
 		end
 	end
 
@@ -28,7 +43,8 @@ class AnswerSheetsController < ApplicationController
 
 	def update
 		answersheet = AnswerSheet.find params[:id]
-		if answersheet.update JSON.parse(params[:answer_sheet])
+		timer_active = answersheet.end_time >= Time.now and answersheet.start_time <= Time.now
+		if timer_active and answersheet.update params[:answer_sheet].symbolize_keys
 			message = 'AnswerSheet successfully edited'
 		else
 			message = 'AnswerSheet modification failed'
@@ -40,10 +56,10 @@ class AnswerSheetsController < ApplicationController
 	end
 
 	def show
-		answersheet = AnswerSheet.find params[:id]
+		@answer_sheet = AnswerSheet.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: answersheet}
+			format.json {render json: {answerSheet: @answer_sheet}}
 		end
 	end
 
@@ -55,7 +71,11 @@ class AnswerSheetsController < ApplicationController
 			message = "Error in removing AnswerSheet"
 		end
 		respond_to do |format|
+			format.html {render json: {reply: message}}
 			format.json {render json: {reply: message}}
 		end
+	end
+
+	def time_up
 	end
 end

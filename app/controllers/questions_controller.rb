@@ -67,7 +67,7 @@ class QuestionsController < ApplicationController
 		question = Question.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {question: question}}
+			format.json {render json: {question: question.as_json.except!("answers")}}
 		end
 	end
 

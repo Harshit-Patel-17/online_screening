@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   post 'exams/:id', to: 'exams#update'
   resources :exams
 
+  get 'answer_sheets/time_up', to: 'answer_sheets#time_up'
+  post 'answer_sheets/:id', to: 'answer_sheets#update'
   resources :answer_sheets
 
   post 'colleges/:id', to: 'colleges#update'
