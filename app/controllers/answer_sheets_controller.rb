@@ -43,7 +43,7 @@ class AnswerSheetsController < ApplicationController
 
 	def update
 		answersheet = AnswerSheet.find params[:id]
-		timer_active = answersheet.end_time >= Time.now and answersheet.start_time <= Time.now
+		timer_active = answersheet.end_time >= DateTime.now and answersheet.start_time <= DateTime.now
 		if timer_active and answersheet.update params[:answer_sheet].symbolize_keys
 			message = 'AnswerSheet successfully edited'
 		else

@@ -14,17 +14,15 @@ class AnswerSheet < ActiveRecord::Base
 
 		exam_id = as.exam_id
 		exam = Exam.find(exam_id)
-		date = exam.date
 		swt = exam.start_window_time
 		ewt = exam.end_window_time
-		swt = Time.new(date.year, date.month, date.day, swt.hour, swt.min, swt.sec)
-		ewt = Time.new(date.year, date.month, date.day, ewt.hour, ewt.min, ewt.sec)
-		window_active = swt <= Time.now and ewt >= Time.now
+		now = DateTime.now.change(:offset => "+0000")
+		window_active = swt <= now and ewt >= now
 		unless window_active
 			return false
 		end
-		as.start_time = Time.now
-		as.end_time = as.start_time + exam.duration_mins * 60
+		as.start_time = DateTime.now
+		as.end_time = as.start_time + exam.duration_mins.minutes
 		question_ids = exam.exam_questions.select(:question_id)
 
 		qcpw = exam.question_count_per_weightage
@@ -69,7 +67,7 @@ class AnswerSheet < ActiveRecord::Base
 		end
 
 		if cut_off
-			answer_sheets = answer_sheets.where('score <= ?', cut_off)
+			answer_sheets = answer_sheets.where('score >= ?', cut_off)
 		end
 
 		answer_sheets.each do |as|

@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'spreadsheet'
+gem 'email_verifier'
+gem 'digest'
 gem 'devise'
 gem 'cancan'
 gem 'angularjs-rails'

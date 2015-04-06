@@ -9,9 +9,9 @@ angular.module('onlineScreening')
 			$rest.one('exams', id).get()
 			.then(function(data){
 				$scope.exam = data.exam;
-				$scope.exam.date = new Date($scope.exam.date);
-				$scope.exam.start_window_time = new Date($scope.exam.start_window_time);
-				$scope.exam.end_window_time = new Date($scope.exam.end_window_time);
+				$scope.tz_offset = (new Date()).getTimezoneOffset() * 60 * 1000;
+				$scope.exam.start_window_time = new Date(Date.parse($scope.exam.start_window_time) + $scope.tz_offset);
+				$scope.exam.end_window_time = new Date(Date.parse($scope.exam.end_window_time) + $scope.tz_offset);
 			}, function(){
 				alert("Get exam request failed.");
 			});

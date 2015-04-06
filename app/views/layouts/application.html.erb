@@ -6,7 +6,9 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body ng-app='onlineScreening'>
+<body ng-app='onlineScreening' style="padding-top: 60px">
+
+<%= render 'layouts/header' %>
 
 <% if notice %>	
 <div class="alert alert-success">

@@ -1,0 +1,14 @@
+<div ng-controller="DeviseRegistrationsMassNewCtrl">
+	<form action="" method="post">
+		<input type="file" name="users" fileread="users"></input>
+		<button type="button" ng-click="uploadSheet()">Upload</button>
+	</form>
+	<div ng-if="showResults">
+		<br><hr>
+		<h4>Registered Users</h4>
+		<div class="gridStyle" ng-grid="registeredUsersGridOptions"></div>
+		<br><hr>
+		<h4>Unregistred Users</h4>
+		<div class="gridStyle" ng-grid="unregisteredUsersGridOptions"></div>
+	</div>
+</div>

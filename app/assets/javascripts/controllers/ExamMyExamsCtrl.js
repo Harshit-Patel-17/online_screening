@@ -24,25 +24,9 @@ angular.module('onlineScreening')
 			var date;
 			var time;
 			for(i = 0; i < $scope.myExams.length; i++){
-				date = new Date($scope.myExams[i].date);
-				time = new Date($scope.myExams[i].start_window_time);
-
-				year = date.getFullYear();
-				month = date.getMonth();
-				day = date.getDate();
-				hours = time.getHours();
-				minutes = time.getMinutes();
-				$scope.startTime[$scope.myExams[i].id] = new Date(year, month, day, hours, minutes);
-
-				date = new Date($scope.myExams[i].date);
-				time = new Date($scope.myExams[i].end_window_time);
-
-				year = date.getFullYear();
-				month = date.getMonth();
-				day = date.getDate();
-				hours = time.getHours();
-				minutes = time.getMinutes();
-				$scope.endTime[$scope.myExams[i].id] = new Date(year, month, day, hours, minutes);
+				$scope.tz_offset = (new Date()).getTimezoneOffset() * 60 * 1000;
+				$scope.startTime[$scope.myExams[i].id] = Date.parse($scope.myExams[i].start_window_time) + $scope.tz_offset;
+				$scope.endTime[$scope.myExams[i].id] = Date.parse($scope.myExams[i].end_window_time) + $scope.tz_offset;
 			}	
 			$timeout($scope.refreshTime, 1000);
 		};
@@ -88,16 +72,15 @@ angular.module('onlineScreening')
 	    var linkCellTemplate = '<a ng-show="remainingSecs[' + "row.getProperty('id')" + '] <= 0 && !windowOver[' + "row.getProperty('id')" + ']" ng-click="'+ start_exam_call +'">start</a>'
 	    						+ '<span ng-show="windowOver[' + "row.getProperty('id')" + ']">Window over</span>';
 	    var timerCellTemplate = '<span>{{remainingTime[' + 'row.getProperty("id")' + ']}}</span>';
+	    var startWindowTimeCellTemplate = '<span ng-bind="' + "row.getProperty('start_window_time') | timeZoneCorrection" + ' "></span>';
+	    var endWindowTimeCellTemplate = '<span ng-bind="' + "row.getProperty('end_window_time') | timeZoneCorrection" + ' "></span>';
 
 	    $scope.columnDefs = [
 	    	{ field: 'id', displayName: 'Id'},
 	    	{ field: 'exam_name', displayName: 'Exam Name'},
-	    	{ field: 'college_name', displayName: 'College Name'},
-	    	{ field: 'date', displayName: 'Date'},
 	    	{ field: 'duration_mins', displayName: 'Duration (mins)'},
-	    	{ field: 'start_window_time', displayName: 'SWT', cellFilter: 'date:\'hh:mm a\''},
-	    	{ field: 'end_window_time', displayName: 'EWT', cellFilter: 'date:\'hh:mm a\''},
-	    	{ field: 'status', displayName: 'Status'},
+	    	{ field: 'start_window_time', displayName: 'SWT', cellTemplate: startWindowTimeCellTemplate},
+	    	{ field: 'end_window_time', displayName: 'EWT', cellTemplate: endWindowTimeCellTemplate},
 	    	{ field: 'timer', displayName: 'Starts in', cellTemplate: timerCellTemplate},
 	    	{ field: 'href', displayName: 'Links', cellTemplate: linkCellTemplate}
 	    ];

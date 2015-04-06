@@ -1,27 +1,41 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { :registrations => "users/registrations" }
+  devise_scope :user do
+    get 'users/mass_new', :to => 'users/registrations#mass_new'
+    post 'users/mass_create', :to => 'users/registrations#mass_create'
+    devise_for :users, :controllers => { :registrations => "users/registrations" }
+  end
 
-  get 'questions/questions_per_weightage', to: 'questions#questions_per_weightage'
-  post 'questions/:id', to: 'questions#update'
+  namespace "questions" do
+    get 'questions_per_weightage', action: 'questions_per_weightage', as: 'questions_per_weightage'
+    post ':id', action: 'update', as: 'update'
+  end
   resources :questions 
 
-  post 'exams/:id/scheme', to: 'exams#set_scheme'
-  get 'exams/:id/scheme', to: 'exams#show_scheme'
-  post 'exams/:id/questions', to: 'exams#set_questions'
-  get 'exams/:id/questions', to: 'exams#select_questions'
-  post 'exams/:id/colleges', to: 'exams#set_colleges'
-  get 'exams/:id/colleges', to: 'exams#select_colleges'
-  post 'exams/:id', to: 'exams#update'
+  namespace "exams" do
+    post ':id/scheme', action: 'set_scheme', as: 'set_scheme'
+    get ':id/scheme', action: 'show_scheme', as: 'show_scheme'
+    post ':id/questions', action: 'set_questions', as: 'set_questions'
+    get ':id/questions', action: 'select_questions', as: 'select_cquestions'
+    post ':id/colleges', action: 'set_colleges', as: 'set_colleges'
+    get ':id/colleges', action: 'select_colleges', as: 'select_colleges'
+    post ':id', action: 'update', as: 'update'
+  end
   resources :exams
 
-  get 'answer_sheets/time_up', to: 'answer_sheets#time_up'
-  post 'answer_sheets/:id', to: 'answer_sheets#update'
+  namespace "answer_sheets" do
+    get 'time_up', action: 'time_up', as: 'time_up'
+    post ':id', action: 'update', as: 'update'
+  end
   resources :answer_sheets
 
-  post 'colleges/:id', to: 'colleges#update'
+  namespace "colleges" do
+    post ':id', action: 'update', as: 'update'
+  end
   resources :colleges
 
   get 'my_exams', to: 'exams#my_exams'
+
+  root to: "welcome#welcome"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

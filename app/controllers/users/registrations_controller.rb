@@ -1,7 +1,9 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_sign_up_params, only: [:create]
 # before_filter :configure_account_update_params, only: [:update]
-
+  
+  respond_to :html, :json
+  
   # GET /resource/sign_up
   def new
     super
@@ -25,6 +27,23 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # DELETE /resource
   def destroy
     super
+  end
+
+  def mass_new
+  end
+
+  def mass_create
+    unless params[:users]
+      flash[:alert] = "Please select spreadsheet"
+      redirect_to users_mass_new()
+    end
+
+    report_json = User.mass_create params[:users]
+
+    respond_to do |format|
+      format.html{ render json: report_json }
+      format.json{ render json: report_json }
+    end
   end
 
   # GET /resource/cancel
