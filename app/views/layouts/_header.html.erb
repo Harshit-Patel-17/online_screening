@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Online Screening</a>
+      <a class="navbar-brand" href="#">Infibeam Online Screening</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -25,6 +25,8 @@
           	<li><%= link_to "Index", exams_path, :method => "get" %></li>
           	<li class="divider"></li>
             <li><%= link_to "New Exam", new_exam_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Results", answer_sheets_path, :method => "get" %></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -49,7 +51,17 @@
       </ul>
       <% if user_signed_in? %>
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "Log out", destroy_user_session_path, :method => "delete" %></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <i class="glyphicon glyphicon-user"></i> <%= current_user.first_name %>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><%= link_to "Account Settings", edit_user_registration_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Log out", destroy_user_session_path, :method => "delete" %></li>
+          </ul>
+        </li>
       </ul>
       <% end %>
     </div><!--/.nav-collapse -->

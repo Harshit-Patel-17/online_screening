@@ -11,6 +11,8 @@
  * file per style scope.
  *
  *= require angular-ng-grid-rails
+ *= require bootstrap-formhelpers
+ *= require bootstrap-datetimepicker
  *= require_tree .
  *= require_self
  */

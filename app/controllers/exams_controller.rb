@@ -184,4 +184,17 @@ class ExamsController < ApplicationController
 			}
 		end
 	end
+
+	def timezones
+		timezones = []
+		ActiveSupport::TimeZone.all.each do |timezone|
+			tz = Hash.new
+			tz[:timezone] = timezone.to_s
+			tz[:utc_offset] = timezone.utc_offset
+			timezones.push(tz)
+		end
+		respond_to do |format|
+			format.json {render json: {timezones: timezones}}
+		end
+	end
 end

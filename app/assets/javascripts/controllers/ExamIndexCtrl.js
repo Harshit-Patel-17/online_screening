@@ -59,16 +59,14 @@ angular.module('onlineScreening')
 	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>';
 	    var statusCellTemplate = '<span>{{row.getProperty("status")}}</span> <a ng-click="'+ toggle_exam_status_call +'"><i class="glyphicon glyphicon-off"></i></a>';
 	    var selectCellTemplate = '<a data-method="get" href="' + select_college_path + '">Colleges</a>'
-	    						 + ' | <a data-method="get" href="' + select_question_path + '">Questions</a>';;
-	    var startWindowTimeCellTemplate = '<span ng-bind="' + "row.getProperty('start_window_time') | timeZoneCorrection" + ' "></span>';
-	    var endWindowTimeCellTemplate = '<span ng-bind="' + "row.getProperty('end_window_time') | timeZoneCorrection" + ' "></span>';
+	    						 + ' | <a data-method="get" href="' + select_question_path + '">Questions</a>';
 
 	    $scope.columnDefs = [
 	    	{ field: 'id', displayName: 'Id'},
 	    	{ field: 'exam_name', displayName: 'Exam Name'},
 	    	{ field: 'duration_mins', displayName: 'Duration (mins)'},
-	    	{ field: 'start_window_time', displayName: 'SWT', cellTemplate: startWindowTimeCellTemplate},
-	    	{ field: 'end_window_time', displayName: 'EWT', cellTemplate: endWindowTimeCellTemplate},
+	    	{ field: 'start_window_time', displayName: 'SWT', cellFilter: 'date:\'dd-MMM-yyyy, hh:mm a\''},
+	    	{ field: 'end_window_time', displayName: 'EWT', cellFilter: 'date:\'dd-MMM-yyyy, hh:mm a\''},
 	    	{ field: 'select', displayName: 'Select', cellTemplate: selectCellTemplate},
 	    	{ field: 'href', displayName: 'Links', cellTemplate: linkCellTemplate}
 	    ];

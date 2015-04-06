@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :questions 
 
   namespace "exams" do
+    get 'timezones', action: 'timezones', as: 'timezones'
     post ':id/scheme', action: 'set_scheme', as: 'set_scheme'
     get ':id/scheme', action: 'show_scheme', as: 'show_scheme'
     post ':id/questions', action: 'set_questions', as: 'set_questions'

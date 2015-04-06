@@ -1,10 +1,13 @@
 <div ng-controller="ExamNewCtrl">
-	<form method="post" action="/exams" enctype="multipart/form-data">
+	<form method="post" action="/exams" enctype="multipart/form-data" ng-submit="adjustTime()">
 		<ng-form>
 			<input type="text" name="exam[exam_name]" placeholder="Exam name" required></input>
 			<input type="number" name="exam[duration_mins]" placeholder="Exam duration (mins)" required></input>
-			<input type="datetime-local" name="exam[start_window_time]" placeholder="Start window time" required></input>
-			<input type="datetime-local" name="exam[end_window_time]" placeholder="End window time" required></input>
+			<select ng-model="timezone" name="exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone">
+				<option value="" style="display: none">Select Timezone</options>
+			</select>
+			<input ng-model="start_window_time" type="datetime-local" name="exam[start_window_time]" placeholder="Start window time" required></input>
+			<input ng-model="end_window_time" type="datetime-local" name="exam[end_window_time]" placeholder="End window time" required></input>
 		</ng-form>
 		<button type="submit">Submit</button>
 	</form>

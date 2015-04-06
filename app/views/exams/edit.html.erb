@@ -1,11 +1,18 @@
-<div ng-controller="ExamEditCtrl" ng-init="init(<%= @exam_id %>)">
-	<form method="post" action="/exams/<%= @exam_id %>" enctype="multipart/form-data">
+<div class="container col-sm-4" ng-controller="ExamEditCtrl" ng-init="init(<%= @exam_id %>)">
+	<form method="post" action="/exams/<%= @exam_id %>" enctype="multipart/form-data" ng-submit="adjustTime()">
 		<ng-form>
-			<input type="text" name="exam[exam_name]" ng-model="exam.exam_name" placeholder="Exam name" required></input>
-			<input type="number" name="exam[duration_mins]" ng-model="exam.duration_mins" placeholder="Exam duration (mins)" required></input>
-			<input type="datetime-local" name="exam[start_window_time]" ng-model="exam.start_window_time" placeholder="Start window time" required></input>
-			<input type="datetime-local" name="exam[end_window_time]" ng-model="exam.end_window_time" placeholder="End window time" required></input>
+			<label>Exam Name</label>
+			<input class="form-control" type="text" name="exam[exam_name]" ng-model="exam.exam_name" placeholder="Exam name" required></input><br>
+			<label>Duration in Minutes</label>
+			<input class="form-control" type="number" name="exam[duration_mins]" ng-model="exam.duration_mins" placeholder="Exam duration (mins)" required></input><br>
+			<label>Timezone</label>
+			<select class="form-control" ng-model="exam.timezone" name="exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone"></select><br>
+			<label>Start Window Time</label>
+			<input class="form-control" type="datetime-local" name="exam[start_window_time]" id="exam_start_window_time" ng-model="exam.start_window_time" placeholder="Start window time" required></input><br>
+			<label>End Window Time</label>
+			<input class="form-control" type="datetime-local" name="exam[end_window_time]" id="exam_end_window_time" ng-model="exam.end_window_time" placeholder="End window time" required></input><br>
 		</ng-form>
-		<button type="submit">Submit</button>
+		<button class="btn btn-info" type="submit">Submit</button>
+		<button class="btn btn-warning" type="reset">Reset</button>
 	</form>
 </div>

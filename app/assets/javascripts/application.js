@@ -18,4 +18,6 @@
 //= require angular-resource
 //= require angular-ng-grid-rails
 //= require angular-ui-bootstrap
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree .

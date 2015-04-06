@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/johnu/bootstrap-form-helpers-rails.git
+  revision: 05c9de1116b2e10a4adc7795f756935b8e30bc50
+  specs:
+    bootstrap-form-helpers-rails (2.0.0.1)
+      railties (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -43,6 +50,8 @@ GEM
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap3-datetimepicker-rails (4.7.14)
+      momentjs-rails (>= 2.8.1)
     bootstrap3-rails (3.2.0)
       rails (>= 4.0.0)
     builder (3.2.2)
@@ -97,6 +106,8 @@ GEM
     mime-types (2.4.3)
     mini_portile (0.6.2)
     minitest (5.5.1)
+    momentjs-rails (2.9.0)
+      railties (>= 3.1)
     multi_json (1.11.0)
     mysql2 (0.3.18)
     nokogiri (1.6.6.2)
@@ -186,6 +197,8 @@ DEPENDENCIES
   angular-ng-grid-rails
   angular-ui-bootstrap-rails
   angularjs-rails
+  bootstrap-form-helpers-rails!
+  bootstrap3-datetimepicker-rails
   bootstrap3-rails
   cancan
   coffee-rails (~> 4.1.0)
@@ -196,6 +209,7 @@ DEPENDENCIES
   hirb
   jbuilder (~> 2.0)
   jquery-rails
+  momentjs-rails
   mysql2
   rails (= 4.2.0)
   sass-rails (~> 5.0)
