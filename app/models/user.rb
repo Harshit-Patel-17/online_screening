@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	has_one :privilege
+	has_one :privilege, :dependent => :delete
 	has_one :role, through: :privilege
 	has_many :answer_sheets, :dependent => :delete_all
 	belongs_to :college
@@ -9,6 +9,62 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  def self.create_admin admin
+    return false unless admin and admin[:first_name] and admin[:email]
+    begin
+      EmailVerifier.check(admin[:email])
+    rescue Exception => error
+      return false
+    end
+    admin[:password] = Digest::MD5.hexdigest(Time.now.to_s)[0..9]
+    user = User.new
+    user.first_name = admin[:first_name]
+    user.last_name = admin[:last_name] if admin[:last_name]
+    user.email = admin[:email]
+    user.password = admin[:password]
+    user.save
+    admin_role_id = Role.find_by_role_name('admin').id
+    privilege = Privilege.new
+    privilege.user_id = user.id
+    privilege.role_id = admin_role_id
+    privilege.save
+    ApplicationMailer.send_credentials_to_admin(admin[:email], admin[:password]).deliver_now
+    user
+  end
+
+  def self.classify_by_roles
+    users = User.select(:id, :first_name, :last_name, :email, :college_id)
+    retVal = Hash.new
+    retVal[:admins] = []
+    retVal[:users] = []
+    users.each do |user|
+      if user.role.role_name == 'admin'
+        retVal[:admins].push(user)
+      else
+        retVal[:users].push(user)
+      end
+    end
+    return retVal
+  end
+
+  def self.get_non_admins params
+    user_role_id = Role.find_by_role_name('user').id
+    user_ids = Privilege.where('role_id = ?', user_role_id).select(:user_id)
+    users = User.where('id in (?)', user_ids)
+    users = users.offset(params[:offset]) if params[:offset]
+    users = users.limit(params[:limit]) if params[:limit]
+    users = users.where('first_name like ?', params[:first_name] + "%") if params[:first_name] and params[:first_name] != ""
+    users = users.where('email like ?', params[:email] + "%") if params[:email] and params[:email] != ""
+    users = users.where('college_id = ?', params[:college_id] + "%") if params[:college_id] and params[:college_id] != ""
+    users
+  end
+
+  def self.get_admins
+    admin_role_id = Role.find_by_role_name('admin').id
+    admin_ids = Privilege.where('role_id = ?', admin_role_id).select(:user_id)
+    admins = User.where('id in (?)', admin_ids)
+    admins.select(:id, :first_name, :email)
+  end
 
   def self.mass_create users
   	require 'spreadsheet'
@@ -59,6 +115,7 @@ class User < ActiveRecord::Base
           previlege.user_id = user_rec.id
           previlege.role_id = user_role_id
           previlege.save
+          ApplicationMailer.send_credentials_to_student(user[:email], user[:password]).deliver_now
           row[9] = password
           row[10] = "Success"
         else

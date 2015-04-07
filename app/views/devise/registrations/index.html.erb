@@ -1,0 +1,20 @@
+<div ng-controller="UserIndexCtrl">
+	<h4>Admins</h4>
+	<div class="gridStyle" ng-grid="adminGridOptions">
+	</div>
+	<br><hr>
+	<h4>Users</h4>
+	<form class="form-inline">
+		<input class="form-control" type="text" ng-model="params.first_name" placeholder="First name"></input>
+		<input class="form-control" type="text" ng-model="params.email" placeholder="Email"></input>
+		<input class="form-control" type="number" ng-model="params.college_id" placeholder="College Id"></input>
+		<button class="btn btn-default" type="button" ng-click="getUsers()">
+			<i class="glyphicon glyphicon-search"></i>
+		</button>
+		<button class="btn btn-default" type="reset" ng-click="getUsers()">
+			<i class="glyphicon glyphicon-remove"></i>
+		</button>
+	</form><br>
+	<div class="gridStyle" ng-grid="userGridOptions">
+	</div>
+</div>

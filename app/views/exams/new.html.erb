@@ -1,14 +1,26 @@
-<div ng-controller="ExamNewCtrl">
+<div class="col-sm-4" ng-controller="ExamNewCtrl">
 	<form method="post" action="/exams" enctype="multipart/form-data" ng-submit="adjustTime()">
-		<ng-form>
-			<input type="text" name="exam[exam_name]" placeholder="Exam name" required></input>
-			<input type="number" name="exam[duration_mins]" placeholder="Exam duration (mins)" required></input>
-			<select ng-model="timezone" name="exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone">
-				<option value="" style="display: none">Select Timezone</options>
-			</select>
-			<input ng-model="start_window_time" type="datetime-local" name="exam[start_window_time]" placeholder="Start window time" required></input>
-			<input ng-model="end_window_time" type="datetime-local" name="exam[end_window_time]" placeholder="End window time" required></input>
-		</ng-form>
-		<button type="submit">Submit</button>
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Create Exam</strong></div>
+			<div class="panel-body">
+				<ng-form>
+					<label>Exam Name</label>
+					<input class="form-control" type="text" name="exam[exam_name]" placeholder="Exam name" required></input><br>
+					<label>Duration in Minutes</label>
+					<input class="form-control" type="number" name="exam[duration_mins]" placeholder="Exam duration (mins)" required></input><br>
+					<label>Timezone</label>
+					<select class="form-control" ng-model="timezone" name="exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone">
+						<option value="" style="display: none">Select Timezone</options>
+					</select><br>
+					<label>Start Window Time</label>
+					<input class="form-control" ng-model="start_window_time" type="datetime-local" name="exam[start_window_time]" placeholder="Start window time" required></input><br>
+					<label>End Window Time</label>
+					<input class="form-control" ng-model="end_window_time" type="datetime-local" name="exam[end_window_time]" placeholder="End window time" required></input><br>
+				</ng-form>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Create</button>
+				<button class="btn btn-default" type="reset">Reset</button>
+			</div>
 	</form>
 </div>

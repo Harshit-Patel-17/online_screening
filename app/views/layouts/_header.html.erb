@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
+  <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -40,10 +40,20 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Users <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-          	<li><%= link_to "Index", '', :method => "get" %></li>
+          	<li><%= link_to "Index", users_path, :method => "get" %></li>
           	<li class="divider"></li>
-          	<li><%= link_to "New Admin", '', :method => "get" %></li>
+          	<li><%= link_to "New Admin", users_admin_new_path, :method => "get" %></li>
           	<li class="divider"></li>
+            <li><%= link_to "New Users", users_mass_new_path, :method => "get" %></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Colleges <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><%= link_to "Index", colleges_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "New College", new_college_path, :method => "get" %></li>
+            <li class="divider"></li>
             <li><%= link_to "New Users", users_mass_new_path, :method => "get" %></li>
           </ul>
         </li>

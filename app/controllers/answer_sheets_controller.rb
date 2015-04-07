@@ -1,6 +1,9 @@
 class AnswerSheetsController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authorize_admin, only: [:index, :destroy]
+	before_action :authorize_user, except: [:index, :destroy]
+
 	def index
 		respond_to do |format|
 			format.html {}
@@ -77,5 +80,15 @@ class AnswerSheetsController < ApplicationController
 	end
 
 	def time_up
+	end
+
+	private
+
+	def authorize_admin
+		authorize! :manage, :site, :message => "Only admin can access this url."
+	end
+
+	def authorize_user
+		authorize! :give, :exam, :message => "Log in as student to access this url."
 	end
 end

@@ -9,10 +9,14 @@ angular.module('onlineScreening')
 			$rest.one('exams', $scope.exam_id).one('questions.json').get()
 			.then(function(data){
 				$scope.questions = data.questions;
+				$scope.selected_questions = data.selected_questions
+				$scope.selection = [];
+				for(i = 0; i < $scope.selected_questions.length; i++){
+					$scope.selection[$scope.selected_questions[i]] = true;
+				}
 			},function(){
 				alert("Error in fetching questions.");
 			});
-			$scope.selection = [];
 		};
 		
 

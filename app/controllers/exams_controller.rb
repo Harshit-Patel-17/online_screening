@@ -1,6 +1,9 @@
 class ExamsController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authorize_admin, except: [:my_exams]
+	before_action :authorize_user, only: [:my_exams]
+
 	def index
 		respond_to do |format|
 			format.html {}
@@ -68,7 +71,7 @@ class ExamsController < ApplicationController
 
 	def destroy
 		exam = Exam.find params[:id]
-		if exam.delete
+		if exam.destroy
 			message = "Exam successfully removed"
 		else
 			message = "Error in removing exam"
@@ -115,7 +118,11 @@ class ExamsController < ApplicationController
 			format.html {}
 			format.json {
 				questions = Question.get_for_exam params[:id]
-				render json: {questions: questions.select(:id, :question, :weightage)}
+				selected_questions = ExamQuestion.get_for_exam params[:id]
+				render json: {
+					questions: questions.select(:id, :question, :weightage), 
+					selected_questions: selected_questions
+				}
 			}
 		end
 	end
@@ -132,7 +139,7 @@ class ExamsController < ApplicationController
 			format.html {
 				if is_done
 					flash[:notice] = message
-					url = "/exams/" + params[:id] + "/questions" if is_done
+					url = "/exams/" + params[:id] + "/colleges" if is_done
 				else
 					flash[:alert] = message
 					url = "/exams/" + params[:id] + "/questions" unless is_done
@@ -149,7 +156,11 @@ class ExamsController < ApplicationController
 			format.html {}
 			format.json {
 				colleges = College.all
-				render json: {colleges: colleges}
+				selected_colleges = ExamCollege.get_for_exam params[:id]
+				render json: {
+					colleges: colleges,
+					selected_colleges: selected_colleges
+				}
 			}
 		end
 	end
@@ -196,5 +207,15 @@ class ExamsController < ApplicationController
 		respond_to do |format|
 			format.json {render json: {timezones: timezones}}
 		end
+	end
+
+	private
+
+	def authorize_admin
+		authorize! :manage, :site, :message => "Only admin can access this url."
+	end
+
+	def authorize_user
+		authorize! :give, :exam, :message => "Log in as student to access this url."
 	end
 end

@@ -57,18 +57,23 @@ angular.module('onlineScreening')
 					else
 						$scope.answer.checkboxes[i] = false;
 				}
+			} else if($scope.question.qtype == 'numerical'){
+				$scope.answer.number = parseFloat($scope.answerSheet.answers[$scope.question_index][0]);
 			}
 		};
 
 		$scope.storeAnswer = function(){
 			$scope.answerSheet.answers[$scope.question_index] = [];
 			if($scope.question.qtype == 'mcq'){
-				$scope.answerSheet.answers[$scope.question_index].push($scope.answer.radio);
+				if($scope.answer.radio != null)
+					$scope.answerSheet.answers[$scope.question_index].push($scope.answer.radio);
 			} else if($scope.question.qtype == 'multi'){
 				for(i = 0; i < $scope.answer.checkboxes.length; i++){
 					if($scope.answer.checkboxes[i])
 						$scope.answerSheet.answers[$scope.question_index].push(i+"");
 				}
+			} else if($scope.question.qtype == 'numerical') {
+				$scope.answerSheet.answers[$scope.question_index].push($scope.answer.number+"");
 			}
 			params = {"answer_sheet": {"answers": $scope.answerSheet.answers}};
 			$rest.setRequestSuffix('.json');
@@ -111,5 +116,10 @@ angular.module('onlineScreening')
 				$scope.prevEnabled = false;
 			$scope.nextEnabled = true;
 			$scope.getQuestion($scope.question_index);
+		};
+
+		$scope.gotoQuestion = function(index){
+			$scope.question_index = index;
+			$scope.getQuestion(index);
 		};
 	}]);

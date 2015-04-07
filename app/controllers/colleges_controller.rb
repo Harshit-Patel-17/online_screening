@@ -1,6 +1,8 @@
 class CollegesController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authorize_admin
+
 	def index
 		respond_to do |format|
 			format.html {}
@@ -78,5 +80,11 @@ class CollegesController < ApplicationController
 			format.html {render json: {reply: message}}
 			format.json {render json: {reply: message}}
 		end
+	end
+
+	private
+
+	def authorize_admin
+		authorize! :manage, :site, :message => "Only admin can access this url."
 	end
 end

@@ -16,8 +16,6 @@ class Exam < ActiveRecord::Base
 	end
 
 	def set_scheme! test
-		old_exam_questions = self.exam_questions
-		old_exam_questions.delete_all
 		qpw = Question.questions_per_weightage
 		test.each do |key, value|
 			key = key.to_i
@@ -25,6 +23,8 @@ class Exam < ActiveRecord::Base
 			return false unless qpw.has_key? key
 			return false if qpw[key] < value
 		end
+		old_exam_questions = self.exam_questions
+		old_exam_questions.delete_all
 		formatted_test = []
 		test.each do |key, value|
 			temp = Hash.new
@@ -39,8 +39,6 @@ class Exam < ActiveRecord::Base
 	end
 
 	def set_questions question_ids
-		old_exam_questions = self.exam_questions
-		old_exam_questions.delete_all
 		questions = Question.where('id IN (?)', question_ids)
 		qpw = questions.group(:weightage).count
 		self.question_count_per_weightage.each do |qcpw|
@@ -49,6 +47,8 @@ class Exam < ActiveRecord::Base
 			return false unless qpw.has_key? weightage
 			return false if qpw[weightage] < count
 		end
+		old_exam_questions = self.exam_questions
+		old_exam_questions.delete_all
 		question_ids.each do |qid|
 			eq = ExamQuestion.new
 			eq[:exam_id] = self.id

@@ -1,10 +1,25 @@
-<div ng-controller="ExamShowSchemeCtrl" ng-init="init(<%= @exam.id %>)">
+<div class="col-sm-4" ng-controller="ExamShowSchemeCtrl" ng-init="init(<%= @exam.id %>)">
 	<form action="" enctype="application/json" method="post">
-		<span ng-repeat="(key, value) in qpw">
-			<input type="text" value="{{key}}" disabled></input>
-			<input type="number" name="{{'scheme['+key+']'}}" placeholder="Count for exam" ng-model="scheme[key]"></input>
-			<span>Max: {{value}}</span><br>
-		</span>
-		<button type="submit">Submit</button>
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Set Exam Scheme</strong></div>
+			<div class="panel-body">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th class="col-md-2">Weightage</th>
+						<th class="col-md-2">Questions Available</th>
+						<th class="col-md-2">Questions in exam</th>
+					</tr>
+					<tr ng-repeat="(key, value) in qpw">
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+						<td>
+							<input type="number" name="{{'scheme['+key+']'}}" placeholder="Count for exam" ng-model="scheme[key]"></input>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Submit</button>
+			</div>
 	</form>
 </div>

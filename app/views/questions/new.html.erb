@@ -1,21 +1,42 @@
-<div ng-controller="QuestionNewCtrl">
+<div class="col-sm-4" ng-controller="QuestionNewCtrl">
 	<form method="post" action="/questions" enctype="multipart/form-data">
-		<ng-form>
-			<textarea name="question[question]" placeholder="Question text" required></textarea>
-			<select name="question[qtype]" ng-model="qtype" required>
-				<option value="" style="display: none">Select question type</option>
-				<option value="mcq">Single correct answer type</option>
-				<option value="multi">Multiple correct answer typr</option>
-				<option value="numerical">Numerical answer type</option>
-			</select>
-			<input type="number" name="question[no_of_options]" placeholder="Total options" ng-model="no_of_options" required></input>
-			<span ng-repeat="index in [] | range: no_of_options">
-				<input type="{{selection_box}}" name="question[answers][]" value="{{index}}"></input>
-				<input type="text" name="question[options][]" placeholder="{{'option '+(index+1)}}" required></input>
-			</span>
-			<input type="number" name="question[weightage]" placeholder="Weightage" required></input>
-			<input type="file" name="image"></input>
-		</ng-form>
-		<button type="submit">Submit</button>
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Create Question</strong></div>
+			<div class="panel-body">
+				<ng-form>
+					<label>Question Text</label>
+					<textarea class="form-control" name="question[question]" placeholder="Question text" required></textarea><br>
+					<label>Question Type</label>
+					<select class="form-control" name="question[qtype]" ng-model="qtype" required>
+						<option value="" style="display: none">Select question type</option>
+						<option value="mcq">Single correct answer type</option>
+						<option value="multi">Multiple correct answer typr</option>
+						<option value="numerical">Numerical answer type</option>
+					</select><br>
+					<div ng-if="options">
+						<label>Number of Options</label>
+						<input class="form-control" type="number" name="question[no_of_options]" placeholder="Total options" ng-model="no_of_options" required></input><br>
+						<label>Options</label>
+						<span ng-repeat="index in [] | range: no_of_options">
+							<div>
+								<input type="{{selection_box}}" name="question[answers][]" value="{{index}}"></input>
+								<input type="text" name="question[options][]" placeholder="{{'option '+(index+1)}}" required></input>
+							</div>
+						</span><br>
+					</div>
+					<div ng-if="!options">
+						<label>Answer</label>
+						<input class="form-control" type="number" name="question[answers][]" required></input><br>
+					</div>
+					<label>Weightage</label>
+					<input class="form-control" type="number" name="question[weightage]" placeholder="Weightage" required></input><br>
+					<label>Image</label>
+					<input class="form-control" type="file" name="image"></input><br>
+				</ng-form>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Create</button>
+				<button class="btn btn-default" type="reset">Reset</button>
+			</div>
 	</form>
 </div>

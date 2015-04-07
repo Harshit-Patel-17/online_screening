@@ -6,13 +6,17 @@ angular.module('onlineScreening')
 	function($scope, $http, $rest){
 		$scope.init = function(id){
 			$scope.college_id = id;
-			$rest.all('colleges.json').get('')
+			$rest.one('exams', $scope.college_id).one('colleges.json').get()
 			.then(function(data){
 				$scope.colleges = data.colleges;
+				$scope.selected_colleges = data.selected_colleges
+				$scope.selection = [];
+				for(i = 0; i < $scope.selected_colleges.length; i++){
+					$scope.selection[$scope.selected_colleges[i]] = true;
+				}
 			},function(){
 				alert("Error in fetching colleges.");
 			});
-			$scope.selection = [];
 		};
 		
 

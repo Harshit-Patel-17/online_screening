@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
   devise_scope :user do
+    get 'users', :to => 'users/registrations#index'
     get 'users/mass_new', :to => 'users/registrations#mass_new'
     post 'users/mass_create', :to => 'users/registrations#mass_create'
+    get 'users/admin_new', :to => 'users/registrations#admin_new'
+    post 'users/admin_create', :to => 'users/registrations#admin_create'
+    delete 'users/:id/destroy', :to => 'users/registrations#admin_destroy'
+    get 'users/non_admins', :to => 'users/registrations#users_index'
+    get 'users/admins', :to => 'users/registrations#admins_index'
     devise_for :users, :controllers => { :registrations => "users/registrations" }
   end
 

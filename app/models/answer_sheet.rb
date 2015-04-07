@@ -16,7 +16,7 @@ class AnswerSheet < ActiveRecord::Base
 		exam = Exam.find(exam_id)
 		swt = exam.start_window_time
 		ewt = exam.end_window_time
-		now = DateTime.now.change(:offset => "+0000")
+		now = DateTime.now.utc
 		window_active = swt <= now and ewt >= now
 		unless window_active
 			return false
@@ -49,9 +49,6 @@ class AnswerSheet < ActiveRecord::Base
 		retValue = []
 		answer_sheets = AnswerSheet.where('exam_id = ?', exam_id)
 		answer_sheets.each do |as|
-			if as.score != nil
-				next
-			end
 			score = 0
 			question_ids = as.questions
 			question_ids.each_with_index do |qid, index|

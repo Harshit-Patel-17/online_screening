@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authorize_admin, except: [:show]
+
 	def index
 		respond_to do |format|
 			format.html {}
@@ -92,4 +94,11 @@ class QuestionsController < ApplicationController
 			format.json {render json: {qpw: qpw}}
 		end
 	end
+
+	private
+
+	def authorize_admin
+		authorize! :manage, :site, :message => "Only admin can access this url."
+	end
+
 end

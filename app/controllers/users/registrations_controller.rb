@@ -1,8 +1,29 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  before_filter :configure_sign_up_params, only: [:create]
+  before_filter :configure_sign_up_params, only: [:create, :admin_create]
 # before_filter :configure_account_update_params, only: [:update]
   
   respond_to :html, :json
+
+  def index 
+    respond_to do |format|
+      format.html {}
+      format.json {render json: User.classify_by_roles}
+    end
+  end
+
+  def users_index
+    users = User.get_non_admins params
+    respond_to do |format|
+      format.json{render json: {users: users}}
+    end
+  end
+
+  def admins_index
+    admins = User.get_admins
+    respond_to do |format|
+      format.json{render json: {admins: admins}}
+    end
+  end
   
   # GET /resource/sign_up
   def new
@@ -43,6 +64,43 @@ class Users::RegistrationsController < Devise::RegistrationsController
     respond_to do |format|
       format.html{ render json: report_json }
       format.json{ render json: report_json }
+    end
+  end
+
+  def admin_new
+  end
+
+  def admin_create
+    user = User.create_admin params[:admin]
+    if user
+      message = "Admin successfully created"
+    else
+      message = "Admin creation failed"
+    end
+    respond_to do |format|
+      format.html {
+        if user
+          flash[:notice] = message 
+          redirect_to users_path 
+        else
+          flash[:alert] = message
+          redirect_to users_admin_new_path
+        end
+      }
+      format.json {render json: {reply: message, id: user.id}}
+    end
+  end
+
+  def admin_destroy
+    user = User.find params[:id]
+    if user.destroy
+      message = "User successfully removed"
+    else
+      message = "Error in removing user"
+    end
+    respond_to do |format|
+      format.html {render json: {reply: message}}
+      format.json {render json: {reply: message}}
     end
   end
 

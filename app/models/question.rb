@@ -7,6 +7,7 @@ class Question < ActiveRecord::Base
 	
 	def self.set question, image
 		question = question.symbolize_keys
+		question[:options] = question[:options] || []
 		q = Question.new(question)
 		if image
 			q.upload_image! image
