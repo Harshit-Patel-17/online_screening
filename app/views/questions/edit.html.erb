@@ -29,6 +29,10 @@
 						<label>Answer</label>
 						<input class="form-control" type="number" name="question[answers][]" ng-model="question.answers[0]" required></input><br>
 					</div>
+					<label>Question Category</label>
+					<select class="form-control" ng-model="question.question_category_id" name="question[question_category_id]" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
+						<option value="" style="display:none">Select Category</option>
+					</select><br>
 					<label>Weightage</label>
 					<input class="form-control" type="number" name="question[weightage]" ng-model="question.weightage" placeholder="Weightage" required></input><br>
 					<label>Image</label>

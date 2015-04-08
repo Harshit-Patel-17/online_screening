@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 	respond_to :html, :json
 
-	before_action :authorize_admin, except: [:show]
+	before_action :authorize_admin, except: [:show_without_answers]
 
 	def index
 		respond_to do |format|
@@ -69,6 +69,14 @@ class QuestionsController < ApplicationController
 		question = Question.find params[:id]
 		respond_to do |format|
 			format.html {}
+			format.json {render json: {question: question.as_json}}
+		end
+	end
+
+	def show_without_answers
+		question = Question.find params[:id]
+		respond_to do |format|
+			format.html {}
 			format.json {render json: {question: question.as_json.except!("answers")}}
 		end
 	end
@@ -88,7 +96,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def questions_per_weightage
-		qpw = Question.questions_per_weightage
+		qpw = Question.questions_per_weightage params[:question_category_id]
 		respond_to do |format|
 			format.html {render json: {qpw: qpw}}
 			format.json {render json: {qpw: qpw}}

@@ -6,7 +6,24 @@ angular.module('onlineScreening')
 	function($scope, $http, $rest){
 		$scope.init = function(id){
 			$scope.exam_id = id;
-			$rest.one('exams', $scope.exam_id).one('questions.json').get()
+			$rest.one('exams', $scope.exam_id).one('question_categories.json').get()
+			.then(function(data){
+				$scope.questionCategories = data.questionCategories;
+				if($scope.questionCategories[0]){
+					$scope.question_category = $scope.questionCategories[0];
+					$scope.getQuestions();
+				}
+				$scope.$watch('question_category', function(newVal){
+					$scope.getQuestions();
+				}, true);
+			},function(){
+				alert("Error in fetching question_categories.");
+			});
+		};
+
+		$scope.getQuestions = function(){
+			params = {"question_category_id": $scope.question_category.id};
+			$rest.one('exams', $scope.exam_id).one('questions.json').get(params)
 			.then(function(data){
 				$scope.questions = data.questions;
 				$scope.selected_questions = data.selected_questions

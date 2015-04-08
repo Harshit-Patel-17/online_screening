@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150406170844) do
+ActiveRecord::Schema.define(version: 20150408111926) do
 
   create_table "answer_sheets", force: :cascade do |t|
     t.integer  "exam_id",       limit: 4
@@ -82,6 +82,12 @@ ActiveRecord::Schema.define(version: 20150406170844) do
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
   add_index "privileges", ["user_id"], name: "index_privileges_on_user_id", using: :btree
 
+  create_table "question_categories", force: :cascade do |t|
+    t.string   "category_name", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "questions", force: :cascade do |t|
     t.text     "question",                limit: 65535
     t.text     "options",                 limit: 65535
@@ -94,7 +100,10 @@ ActiveRecord::Schema.define(version: 20150406170844) do
     t.integer  "correct_response_count",  limit: 4,     default: 0
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
+    t.integer  "question_category_id",    limit: 4
   end
+
+  add_index "questions", ["question_category_id"], name: "index_questions_on_question_category_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "role_name",  limit: 255
@@ -138,5 +147,6 @@ ActiveRecord::Schema.define(version: 20150406170844) do
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "privileges", "roles"
   add_foreign_key "privileges", "users"
+  add_foreign_key "questions", "question_categories"
   add_foreign_key "users", "colleges"
 end

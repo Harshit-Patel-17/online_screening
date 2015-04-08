@@ -2,11 +2,12 @@ class ExamQuestion < ActiveRecord::Base
 	belongs_to :exam
   belongs_to :question
 
-  def self.get_for_exam exam_id
+  def self.get_for_exam exam_id, question_category_id
   	retVal = []
-  	questions = ExamQuestion.where('exam_id = ?', exam_id)
-  	questions.each do |q|
-  		retVal.push(q.question_id)
+    exam = Exam.find(exam_id)
+  	questions = exam.questions.where('question_category_id = ?', question_category_id).select(:id)
+    questions.each do |q|
+  		retVal.push(q.id)
   	end
   	return retVal
   end

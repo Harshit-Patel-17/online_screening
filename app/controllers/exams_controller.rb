@@ -86,13 +86,13 @@ class ExamsController < ApplicationController
 		@exam = Exam.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json { render json: {scheme: @exam.get_question_count_per_weightage}}
+			format.json { render json: {scheme: @exam.get_question_count_per_weightage(params[:question_category_id])}}
 		end
 	end
 
 	def set_scheme
 		exam = Exam.find params[:id]
-		is_done = exam.set_scheme! params[:scheme]
+		is_done = exam.set_scheme! params[:scheme], params[:question_category_id]
 		if is_done
 			message = "Test has been set successfully"
 		else
@@ -117,8 +117,8 @@ class ExamsController < ApplicationController
 		respond_to do |format|
 			format.html {}
 			format.json {
-				questions = Question.get_for_exam params[:id]
-				selected_questions = ExamQuestion.get_for_exam params[:id]
+				questions = Question.get_for_exam params[:id], params[:question_category_id]
+				selected_questions = ExamQuestion.get_for_exam params[:id], params[:question_category_id]
 				render json: {
 					questions: questions.select(:id, :question, :weightage), 
 					selected_questions: selected_questions
@@ -129,7 +129,7 @@ class ExamsController < ApplicationController
 
 	def set_questions
 		exam = Exam.find params[:id]
-		is_done = exam.set_questions params[:question_ids]
+		is_done = exam.set_questions params[:question_ids], params[:question_category_id]
 		if is_done
 			message = "Questions successfully set"
 		else
@@ -206,6 +206,14 @@ class ExamsController < ApplicationController
 		end
 		respond_to do |format|
 			format.json {render json: {timezones: timezones}}
+		end
+	end
+
+	def question_categories
+		exam = Exam.find params[:id]
+		respond_to do |format|
+			format.html {render json: {questionCategories: exam.get_question_categories}}
+			format.json {render json: {questionCategories: exam.get_question_categories}}
 		end
 	end
 

@@ -3,6 +3,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><strong>Set Exam Scheme</strong></div>
 			<div class="panel-body">
+				<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
+					<option value="" style="display:none">Select Category</option>
+				</select><br>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<th class="col-md-2">Weightage</th>
@@ -21,5 +24,6 @@
 			<div class="panel-footer">
 				<button class="btn btn-default" type="submit">Submit</button>
 			</div>
+		</div>
 	</form>
 </div>

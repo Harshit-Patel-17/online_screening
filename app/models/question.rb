@@ -65,16 +65,20 @@ class Question < ActiveRecord::Base
 		self.save
 	end
 
-	def self.questions_per_weightage
-		Question.group(:weightage).count
+	def self.questions_per_weightage question_category_id
+		Question.where('question_category_id = ?', question_category_id).group(:weightage).count
 	end
 
-	def self.get_for_exam exam_id
-		qcpw = Exam.find(exam_id).question_count_per_weightage
+	def self.get_for_exam exam_id, question_category_id
+		question_category_name = QuestionCategory.find(question_category_id).category_name
+		qcpw = Exam.find(exam_id).question_count_per_weightage[question_category_name]
 		weightages = []
-		qcpw.each do |i|
-			weightages.push i['weightage']
+		if qcpw
+			qcpw.each do |i|
+				weightages.push i['weightage']
+			end
 		end
-		questions = Question.where('weightage IN (?)', weightages)
+		questions = Question.where('question_category_id = ?', question_category_id)
+		questions = questions.where('weightage IN (?)', weightages)
 	end
 end

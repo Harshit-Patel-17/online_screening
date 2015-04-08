@@ -9,6 +9,13 @@ angular.module('onlineScreening')
 		$scope.options = true;
 		$scope.selection_box = "radio";
 
+		$rest.all('question_categories.json').get('')
+		.then(function(data){
+			$scope.questionCategories = data.questionCategories;
+		}, function(){
+			alert("Get question categories request failed.");
+		});
+
 		$scope.$watch('qtype', function(newVal){
 			if(newVal == "mcq"){
 				$scope.options = true;

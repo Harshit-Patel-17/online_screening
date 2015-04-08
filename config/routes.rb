@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
 
   namespace "questions" do
+    get ':id/without_answers', action: 'show_without_answers', as: 'show_without_answers'
     get 'questions_per_weightage', action: 'questions_per_weightage', as: 'questions_per_weightage'
     post ':id', action: 'update', as: 'update'
   end
@@ -22,9 +23,10 @@ Rails.application.routes.draw do
     post ':id/scheme', action: 'set_scheme', as: 'set_scheme'
     get ':id/scheme', action: 'show_scheme', as: 'show_scheme'
     post ':id/questions', action: 'set_questions', as: 'set_questions'
-    get ':id/questions', action: 'select_questions', as: 'select_cquestions'
+    get ':id/questions', action: 'select_questions', as: 'select_questions'
     post ':id/colleges', action: 'set_colleges', as: 'set_colleges'
     get ':id/colleges', action: 'select_colleges', as: 'select_colleges'
+    get ':id/question_categories', action: 'question_categories', as: 'question_categories'
     post ':id', action: 'update', as: 'update'
   end
   resources :exams
@@ -39,6 +41,11 @@ Rails.application.routes.draw do
     post ':id', action: 'update', as: 'update'
   end
   resources :colleges
+
+  namespace "question_categories" do
+    post ':id', action: 'update', as: 'update'
+  end
+  resources :question_categories
 
   get 'my_exams', to: 'exams#my_exams'
 

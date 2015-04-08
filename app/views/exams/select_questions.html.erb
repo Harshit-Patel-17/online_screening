@@ -1,5 +1,8 @@
 <div ng-controller="ExamSelectQuestionsCtrl" ng-init="init(<%= @exam.id %>)">
 	<form action="" method="post" enctype="application/json">
+			<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
+			<option value="" style="display:none">Select Category</option>
+		</select><br>
 		<div class="gridStyle" ng-grid="gridOptions">
 		</div>
 		<button type="submit">Submit</submit>

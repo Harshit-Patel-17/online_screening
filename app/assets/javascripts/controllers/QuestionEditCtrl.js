@@ -9,10 +9,17 @@ angular.module('onlineScreening')
 			$rest.one('questions', id).get()
 			.then(function(data){
 				$scope.question = data.question;
+				if($scope.question.qtype == "numerical")
+					$scope.question.answers[0] = parseFloat($scope.question.answers[0]);
 			}, function(){
 				alert("Get question request failed.");
 			});
-			$rest.setRequestSuffix('');
+			$rest.all('question_categories.json').get('')
+			.then(function(data){
+				$scope.questionCategories = data.questionCategories;
+			}, function(){
+				alert("Get question categories request failed.");
+			});
 		};
 
 		$scope.$watch('question.qtype', function(newVal){
@@ -24,7 +31,6 @@ angular.module('onlineScreening')
 				$scope.selection_box = "checkbox";
 			} else if(newVal == 'numerical') {
 				$scope.options = false;
-				$scope.question.answers[0] = parseFloat($scope.question.answers[0]);
 			}
 		});
 	}]);

@@ -1,8 +1,8 @@
 class AnswerSheet < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :exam
-	serialize :questions, Array
-	serialize :answers, Array
+	serialize :questions, JSON
+	serialize :answers, JSON
   
 	def self.set answer_sheet
 		answer_sheet = answer_sheet.symbolize_keys
@@ -26,17 +26,21 @@ class AnswerSheet < ActiveRecord::Base
 		question_ids = exam.exam_questions.select(:question_id)
 
 		qcpw = exam.question_count_per_weightage
-		questions = []
-		answers = []
-		qcpw.each do |i|
-			weightage = i['weightage']
-			count = i['count']
-			temp_questions_ids = Question.where('id in (?) and weightage = ?', question_ids, weightage).select(:id)
-			temp_question_ids = temp_questions_ids.shuffle
-			puts temp_question_ids
-			temp_questions_ids[0..count-1].each do |q|
-				questions.push(q.id)
-				answers.push([])
+		questions = {}
+		answers = {}
+		qcpw.each do |category, scheme|
+			questions[category] = []
+			answers[category] = []
+			scheme.each do |i|
+				weightage = i['weightage']
+				count = i['count']
+				temp_questions_ids = Question.where('id in (?) and weightage = ?', question_ids, weightage).select(:id)
+				temp_question_ids = temp_questions_ids.shuffle
+				puts temp_question_ids
+				temp_questions_ids[0..count-1].each do |q|
+					questions[category].push(q.id)
+					answers[category].push([])
+				end
 			end
 		end
 		as.questions = questions
@@ -50,13 +54,15 @@ class AnswerSheet < ActiveRecord::Base
 		answer_sheets = AnswerSheet.where('exam_id = ?', exam_id)
 		answer_sheets.each do |as|
 			score = 0
-			question_ids = as.questions
-			question_ids.each_with_index do |qid, index|
-				question = Question.find(qid)
-				actual_answers = question.answers.sort
-				given_answers = as.answers[index].sort
-				if actual_answers == given_answers
-					score = score + question.weightage
+			scheme = as.questions
+			scheme.each do |category, question_ids|
+				question_ids.each_with_index do |qid, index|
+					question = Question.find(qid)
+					actual_answers = question.answers.sort
+					given_answers = as.answers[category][index].sort
+					if actual_answers == given_answers
+						score = score + question.weightage
+					end
 				end
 			end
 			as.score = score

@@ -1,10 +1,10 @@
 <div ng-controller="AnswerSheetShowCtrl" ng-init="init(<%= @answer_sheet.id %>)">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-9">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<span>Examination Paper</span>
+						<span><strong>Examination Paper</strong></span>
 					</div>
 					<div style="min-height: 300px" class="panel-body">
 						<strong>Question {{question_index+1}}</strong><br>
@@ -36,10 +36,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						Timer (mm:ss)
+						<strong>Timer (mm:ss)</strong>
 					</div>
 					<div class="panel-body">
 						<center>
@@ -52,12 +52,16 @@
 				</div>
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						Question Navigation
+						<strong>Question Navigation</strong>
 					</div>
 					<div class="panel-body">
-						<button style="margin-right: 10px; margin-bottom: 10px;" class="btn btn-default" ng-repeat="q in answerSheet.questions track by $index" ng-click="gotoQuestion($index)" ng-class="{'btn':true, 'btn-default': !answerSheet.answers[$index].length, 'btn-info': reviewMarkers[$index], 'btn-success': answerSheet.answers[$index].length}">
-							{{$index+1}}
-						</button>
+						<accordion>
+							<accordion-group ng-repeat="(category, question_ids) in answerSheet.questions" heading="{{category}}">
+								<button ng-repeat="qid in question_ids track by $index" style="margin-right: 10px; margin-bottom: 10px;" class="btn btn-default" ng-click="gotoQuestion(category, $index)" ng-class="{'btn':true, 'btn-default': !answerSheet.answers[category][$index].length, 'btn-info': reviewMarkers[$index], 'btn-success': answerSheet.answers[category][$index].length}">
+								{{$index+1}}
+								</button>
+							</accordion-group>
+						</accordion>
 					</div>
 				</div>
 			</div>
