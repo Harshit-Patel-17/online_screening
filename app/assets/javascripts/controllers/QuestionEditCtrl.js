@@ -22,7 +22,9 @@ angular.module('onlineScreening')
 			} else if(newVal == "multi") {
 				$scope.options = true;
 				$scope.selection_box = "checkbox";
-			} else
+			} else if(newVal == 'numerical') {
 				$scope.options = false;
+				$scope.question.answers[0] = parseFloat($scope.question.answers[0]);
+			}
 		});
 	}]);

@@ -8,7 +8,7 @@
 					</div>
 					<div style="min-height: 300px" class="panel-body">
 						<strong>Question {{question_index+1}}</strong><br>
-						<pre><code>{{question.question}}</code></pre>
+						<pre><code style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 2.5ex">{{question.question}}</code></pre>
 						<div class="col-sm-6">
 							<div ng-repeat="option in question.options track by $index">
 								<input ng-if="question.qtype=='mcq'" type="radio"  name="options" ng-model="answer.radio" value="{{$index}}">
@@ -24,11 +24,15 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<center>
+						<div class="pull-left">
+							<button class="btn btn-default" ng-if="!reviewMarkers[question_index]" ng-click="markForReview(question_index)">Mark For Review</button>
+							<button class="btn btn-default" ng-if="reviewMarkers[question_index]" ng-click="unmarkForReview(question_index)">Unmark For Review</button>
+						</div>
+						<div style="text-align:right">
 							<button class="btn btn-primary" type='button' ng-click="prevQuestion()" ng-disabled="!prevEnabled">Previous</button>
 							<button class="btn btn-primary" type='button' ng-click="nextQuestion()" ng-disabled="!nextEnabled">Next</button>
 							<button class="btn btn-success" type='button' ng-click="storeAnswer()">Save</button>
-						</center>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -51,7 +55,7 @@
 						Question Navigation
 					</div>
 					<div class="panel-body">
-						<button style="margin-right: 10px; margin-bottom: 10px;" class="btn btn-default" ng-repeat="q in answerSheet.questions track by $index" ng-click="gotoQuestion($index)" ng-class="{'btn':true, 'btn-default': !answerSheet.answers[$index].length, 'btn-success': answerSheet.answers[$index].length}">
+						<button style="margin-right: 10px; margin-bottom: 10px;" class="btn btn-default" ng-repeat="q in answerSheet.questions track by $index" ng-click="gotoQuestion($index)" ng-class="{'btn':true, 'btn-default': !answerSheet.answers[$index].length, 'btn-info': reviewMarkers[$index], 'btn-success': answerSheet.answers[$index].length}">
 							{{$index+1}}
 						</button>
 					</div>

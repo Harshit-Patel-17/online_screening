@@ -7,7 +7,8 @@ class Question < ActiveRecord::Base
 	
 	def self.set question, image
 		question = question.symbolize_keys
-		question[:options] = question[:options] || []
+		question[:options] = [] if question[:qtype] == 'numerical'
+		question[:options] = question[:options] || [] unless question[:qtype] == 'numerical'
 		q = Question.new(question)
 		if image
 			q.upload_image! image
@@ -21,6 +22,8 @@ class Question < ActiveRecord::Base
 
 	def edit! question, image
 		question = question.symbolize_keys
+		question[:options] = [] if question[:qtype] == 'numerical'
+		question[:options] = question[:options] || [] unless question[:qtype] == 'numerical'
 		q = self
 		if q.image
 			q.delete_image!

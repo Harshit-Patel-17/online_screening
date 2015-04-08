@@ -8,6 +8,7 @@ angular.module('onlineScreening')
 		$scope.nextEnabled = true;
 		$scope.prevEnabled = false;
 		$scope.timer = {};
+		$scope.reviewMarkers = [];
 
 		$scope.countDown = function(){
 			$scope.timer.total_secs--;
@@ -37,6 +38,8 @@ angular.module('onlineScreening')
 				$scope.question_index = 0;
 				if($scope.answerSheet.questions.length == 1)
 					$scope.nextEnabled = false;
+				for(i = 0; i < $scope.answerSheet.questions.length; i++)
+					$scope.reviewMarkers[i] = false;
 				$scope.getQuestion($scope.question_index);
 			}, function(){
 				alert("Get answer-sheet request failed.");
@@ -121,5 +124,13 @@ angular.module('onlineScreening')
 		$scope.gotoQuestion = function(index){
 			$scope.question_index = index;
 			$scope.getQuestion(index);
+		};
+
+		$scope.markForReview = function(index){
+			$scope.reviewMarkers[index] = true;
+		};
+
+		$scope.unmarkForReview = function(index){
+			$scope.reviewMarkers[index] = false;
 		};
 	}]);

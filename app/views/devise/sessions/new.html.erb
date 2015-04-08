@@ -1,26 +1,39 @@
-<h2>Log in</h2>
+<div style="margin-top: 5%"> 
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5 text-center">
+        <%= image_tag "online_screening_logo.png", style: "width: inherit" %>
+      </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+      <div class="col-sm-6">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <strong>User Login </strong>
+              <i class="glyphicon glyphicon-log-in"></i>
+            </div>
+            <div class="panel-body">
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
+              <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email" %><br>
 
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+              <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Password" %><br>
+
+              <% if devise_mapping.rememberable? -%>
+                <div class="field">
+                  <%= f.check_box :remember_me %>
+                  <%= f.label :remember_me %>
+                </div>
+              <% end -%>
+            </div>
+            <div class="panel-footer">
+              <div class="actions">
+                <%= f.submit "Log in", class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <%= render "devise/shared/links" %>
+      </div>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

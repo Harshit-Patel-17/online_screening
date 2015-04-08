@@ -25,6 +25,7 @@
 						</span><br>
 					</div>
 					<div ng-if="!options">
+						<input type="text" name="question[options][]" style="display:none"></input>
 						<label>Answer</label>
 						<input class="form-control" type="number" name="question[answers][]" ng-model="question.answers[0]" required></input><br>
 					</div>
