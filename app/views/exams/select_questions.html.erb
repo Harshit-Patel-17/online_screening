@@ -1,8 +1,32 @@
 <div ng-controller="ExamSelectQuestionsCtrl" ng-init="init(<%= @exam.id %>)">
 	<form action="" method="post" enctype="application/json">
-			<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
-			<option value="" style="display:none">Select Category</option>
-		</select><br>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="panel panel-default">
+						<div class="panel-heading"><strong>Select Category</strong></div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
+								<option value="" style="display:none">Select Category</option>
+							</select><br>
+							<table class="table table-bordered">
+								<tr>
+									<th>Weightage</th>
+									<th>Questions in Scheme</th>
+									<th>Questions Selected</th>
+								</tr>
+								<tr ng-repeat="(weightage, count) in scheme" ng-class="{'danger': scheme[weightage] > getSelectionCountForWeightage(weightage)}">
+									<td>{{weightage}}</td>
+									<td>{{scheme[weightage]}}</td>
+									<td>{{getSelectionCountForWeightage(weightage)}}</td>  
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
 		<div class="gridStyle" ng-grid="gridOptions">
 		</div>
 		<button type="submit">Submit</submit>

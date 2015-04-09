@@ -9,7 +9,8 @@ angular.module('onlineScreening')
 			$rest.all('my_exams.json').get('')
 			.then(function(data){
 				$scope.myExams = data.myExams;
-				$scope.initStartTime();
+				$scope.currentServerTime = data.currentServerTime;
+				$scope.initTimers();
 			},function(){
 				alert("Error in fetching exams.");
 			});
@@ -17,15 +18,19 @@ angular.module('onlineScreening')
 		
 		$scope.startTime = {};
 		$scope.endTime = {};
-		$scope.remainingTime = {};
-		$scope.remainingSecs = {};
+		$scope.remainingTimeToStart = {};
+		$scope.remainingSecsToStart = {};
+		$scope.remainingSecsToEnd = {};
 		$scope.windowOver = {};
-		$scope.initStartTime = function(){
+		$scope.initTimers = function(){
 			var date;
 			var time;
 			for(i = 0; i < $scope.myExams.length; i++){
-				$scope.startTime[$scope.myExams[i].id] = Date.parse($scope.myExams[i].start_window_time);
-				$scope.endTime[$scope.myExams[i].id] = Date.parse($scope.myExams[i].end_window_time);
+				key = $scope.myExams[i].id;
+				$scope.startTime[key] = Date.parse($scope.myExams[i].start_window_time);
+				$scope.endTime[key] = Date.parse($scope.myExams[i].end_window_time);
+				$scope.remainingSecsToStart[key] = parseInt(($scope.startTime[key] - Date.parse($scope.currentServerTime))/1000);
+				$scope.remainingSecsToEnd[key] = parseInt(($scope.endTime[key] - Date.parse($scope.currentServerTime))/1000);
 			}	
 			$timeout($scope.refreshTime, 1000);
 		};
@@ -42,10 +47,10 @@ angular.module('onlineScreening')
 		$scope.refreshTime = function(){
 			for(i = 0; i < $scope.myExams.length; i++){
 				key = $scope.myExams[i].id;
-				$scope.remainingSecs[key] = $scope.startTime[key] - Date.now();
-				$scope.remainingTime[key] = new Date();
-				$scope.remainingTime[key] = $scope.secondsToHMS($scope.remainingSecs[key]/1000);
-				$scope.windowOver[key] = $scope.endTime[key] - Date.now() < 0;
+				$scope.remainingSecsToStart[key]--;
+				$scope.remainingSecsToEnd[key]--;
+				$scope.remainingTimeToStart[key] = $scope.secondsToHMS($scope.remainingSecsToStart[key]);
+				$scope.windowOver[key] = $scope.remainingSecsToEnd[key] <= 0;
 			}
 			$timeout($scope.refreshTime, 1000);
 		};
@@ -68,9 +73,9 @@ angular.module('onlineScreening')
    	 	};
 
 	    var start_exam_call = "startExam(row.getProperty('id'))";
-	    var linkCellTemplate = '<a ng-show="remainingSecs[' + "row.getProperty('id')" + '] <= 0 && !windowOver[' + "row.getProperty('id')" + ']" ng-click="'+ start_exam_call +'">start</a>'
+	    var linkCellTemplate = '<a ng-show="remainingSecsToStart[' + "row.getProperty('id')" + '] <= 0 && !windowOver[' + "row.getProperty('id')" + ']" ng-click="'+ start_exam_call +'">start</a>'
 	    						+ '<span ng-show="windowOver[' + "row.getProperty('id')" + ']">Window over</span>';
-	    var timerCellTemplate = '<span>{{remainingTime[' + 'row.getProperty("id")' + ']}}</span>';
+	    var timerCellTemplate = '<span>{{remainingTimeToStart[' + 'row.getProperty("id")' + ']}}</span>';
 
 	    $scope.columnDefs = [
 	    	{ field: 'id', displayName: 'Id'},

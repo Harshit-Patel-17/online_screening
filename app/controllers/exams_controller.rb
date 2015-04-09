@@ -86,13 +86,13 @@ class ExamsController < ApplicationController
 		@exam = Exam.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json { render json: {scheme: @exam.get_question_count_per_weightage(params[:question_category_id])}}
+			format.json { render json: {examScheme: @exam.get_question_count_per_weightage}}
 		end
 	end
 
 	def set_scheme
 		exam = Exam.find params[:id]
-		is_done = exam.set_scheme! params[:scheme], params[:question_category_id]
+		is_done = exam.set_scheme! params[:exam_scheme]
 		if is_done
 			message = "Test has been set successfully"
 		else
@@ -119,9 +119,11 @@ class ExamsController < ApplicationController
 			format.json {
 				questions = Question.get_for_exam params[:id], params[:question_category_id]
 				selected_questions = ExamQuestion.get_for_exam params[:id], params[:question_category_id]
+				scheme = @exam.get_question_count_per_weightage[params[:question_category_id].to_i]
 				render json: {
 					questions: questions.select(:id, :question, :weightage), 
-					selected_questions: selected_questions
+					selected_questions: selected_questions,
+					scheme: scheme
 				}
 			}
 		end
@@ -139,7 +141,7 @@ class ExamsController < ApplicationController
 			format.html {
 				if is_done
 					flash[:notice] = message
-					url = "/exams/" + params[:id] + "/colleges" if is_done
+					url = "/exams/" + params[:id] + "/questions" if is_done
 				else
 					flash[:alert] = message
 					url = "/exams/" + params[:id] + "/questions" unless is_done
@@ -188,10 +190,11 @@ class ExamsController < ApplicationController
 
 	def my_exams
 		my_exams = Exam.get_for_user current_user.id
+		current_server_time = DateTime.now.utc
 		respond_to do |format|
 			format.html {}
 			format.json {
-				render json: {myExams: my_exams}
+				render json: {myExams: my_exams, currentServerTime: current_server_time}
 			}
 		end
 	end

@@ -20,9 +20,9 @@ angular.module('onlineScreening')
 				window.location.href = "/answer_sheets/time_up"
 		};
 
-		$scope.initTimer = function(end_time){
-			current_time = new Date();
-			end_time = new Date(end_time);
+		$scope.initTimer = function(){
+			current_time = new Date($scope.answerSheet.currentServerTime);
+			end_time = new Date($scope.answerSheet.end_time);
 			$scope.timer.total_secs = Math.floor((end_time - current_time)/1000);
 			$scope.timer.mins = Math.floor($scope.timer.total_secs/60);
 			$scope.timer.secs = $scope.timer.total_secs % 60
@@ -84,7 +84,7 @@ angular.module('onlineScreening')
 			$rest.one('answer_sheets', id).get()
 			.then(function(data){
 				$scope.answerSheet = data.answerSheet;
-				$scope.initTimer(data.answerSheet.end_time);
+				$scope.initTimer();
 				$scope.initDataStructures();
 			}, function(){
 				alert("Get answer-sheet request failed.");

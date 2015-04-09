@@ -1,29 +1,55 @@
-<div class="col-sm-4" ng-controller="ExamShowSchemeCtrl" ng-init="init(<%= @exam.id %>)">
-	<form action="" enctype="application/json" method="post">
-		<div class="panel panel-default">
-			<div class="panel-heading"><strong>Set Exam Scheme</strong></div>
-			<div class="panel-body">
-				<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
-					<option value="" style="display:none">Select Category</option>
-				</select><br>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<th class="col-md-2">Weightage</th>
-						<th class="col-md-2">Questions Available</th>
-						<th class="col-md-2">Questions in exam</th>
-					</tr>
-					<tr ng-repeat="(key, value) in qpw">
-						<td>{{key}}</td>
-						<td>{{value}}</td>
-						<td>
-							<input type="number" name="{{'scheme['+key+']'}}" placeholder="Count for exam" ng-model="scheme[key]"></input>
-						</td>
-					</tr>
-				</table>
+<div ng-controller="ExamShowSchemeCtrl" ng-init="init(<%= @exam.id %>)">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<form action="" enctype="application/json" method="post">
+					<div class="panel panel-default">
+						<div class="panel-heading"><strong>Set Exam Scheme</strong></div>
+						<div class="panel-body">
+							<select class="form-control" ng-model="question_category" name="question_category_id" ng-options="qc.category_name for qc in questionCategories track by qc.id" required>
+								<option value="" style="display:none">Select Category</option>
+							</select><br>
+							<table class="table table-bordered">
+								<tr>
+									<th class="col-md-2">Weightage</th>
+									<th class="col-md-2">Questions Available</th>
+									<th class="col-md-2">Questions in exam</th>
+								</tr>
+								<tr ng-repeat="(weightage, count) in qpw[question_category.id]" ng-class="{'danger': examScheme[question_category.id][weightage] > count}">
+									<td>{{weightage}}</td>
+									<td>{{count}}</td>
+									<td>
+										<input type="number" name="{{'scheme['+weightage+']'}}" placeholder="Count for exam" ng-model="examScheme[question_category.id][weightage]"></input>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="panel-footer">
+							<button class="btn btn-default" type="button" ng-click="validateAndSubmitExamScheme()">Done</button>
+						</div>
+					</div>
+				</form>
 			</div>
-			<div class="panel-footer">
-				<button class="btn btn-default" type="submit">Submit</button>
+
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Summary</strong></div>
+					<div class="panel-body">
+						<table class="table table-bordered">
+							<tr>
+								<th>Category Name</th>
+								<th>Questions Selected</th>
+								<th>Total Questions Available</th>
+							</tr>
+							<tr ng-repeat="(question_category_id, scheme) in examScheme" ng-class="{'danger': schemeCategoryTotal(question_category_id) > categoryTotal(question_category_id)}">
+								<td>{{categoryNameFromId(question_category_id)}}</td>
+								<td>{{schemeCategoryTotal(question_category_id)}}</td>
+								<td>{{categoryTotal(question_category_id)}}</td>  
+							</tr>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
-	</form>
+	</div>
 </div>

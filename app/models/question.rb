@@ -25,7 +25,7 @@ class Question < ActiveRecord::Base
 		question[:options] = [] if question[:qtype] == 'numerical'
 		question[:options] = question[:options] || [] unless question[:qtype] == 'numerical'
 		q = self
-		if q.image
+		if q.image and image
 			q.delete_image!
 		end
 		q.update(question)
@@ -65,8 +65,13 @@ class Question < ActiveRecord::Base
 		self.save
 	end
 
-	def self.questions_per_weightage question_category_id
-		Question.where('question_category_id = ?', question_category_id).group(:weightage).count
+	def self.questions_per_weightage
+		retVal = Hash.new
+		question_categories = Question.group(:question_category_id).select(:question_category_id)
+		question_categories.each do |qc|
+			retVal[qc.question_category_id] = Question.where('question_category_id = ?', qc.question_category_id).group(:weightage).count
+		end
+		return retVal
 	end
 
 	def self.get_for_exam exam_id, question_category_id

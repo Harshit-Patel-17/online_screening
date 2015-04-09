@@ -60,9 +60,11 @@ class AnswerSheetsController < ApplicationController
 
 	def show
 		@answer_sheet = AnswerSheet.find params[:id]
+		answer_sheet = @answer_sheet.as_json
+		answer_sheet[:currentServerTime] = DateTime.now.utc
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {answerSheet: @answer_sheet}}
+			format.json {render json: {answerSheet: answer_sheet}}
 		end
 	end
 

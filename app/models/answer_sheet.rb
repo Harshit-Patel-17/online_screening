@@ -29,12 +29,13 @@ class AnswerSheet < ActiveRecord::Base
 		questions = {}
 		answers = {}
 		qcpw.each do |category, scheme|
+			question_category_id = QuestionCategory.find_by_category_name(category)
 			questions[category] = []
 			answers[category] = []
 			scheme.each do |i|
 				weightage = i['weightage']
 				count = i['count']
-				temp_questions_ids = Question.where('id in (?) and weightage = ?', question_ids, weightage).select(:id)
+				temp_questions_ids = Question.where('id in (?) and weightage = ? and question_category_id = ?', question_ids, weightage, question_category_id).select(:id)
 				temp_question_ids = temp_questions_ids.shuffle
 				puts temp_question_ids
 				temp_questions_ids[0..count-1].each do |q|

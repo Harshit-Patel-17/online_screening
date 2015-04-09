@@ -7,7 +7,7 @@
 						<span><strong>Examination Paper</strong></span>
 					</div>
 					<div style="min-height: 300px" class="panel-body">
-						<strong>Question {{question_index+1}}</strong><br>
+						<strong>{{question_category}} : Question {{question_index+1}}</strong><br>
 						<pre><code style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 2.5ex">{{question.question}}</code></pre>
 						<div class="col-sm-6">
 							<div ng-repeat="option in question.options track by $index">
@@ -56,7 +56,7 @@
 					</div>
 					<div class="panel-body">
 						<accordion>
-							<accordion-group ng-repeat="(category, question_ids) in answerSheet.questions" heading="{{category}}">
+							<accordion-group ng-repeat="(category, question_ids) in answerSheet.questions" heading="{{category}}" is-open="question_category == category">
 								<button ng-repeat="qid in question_ids track by $index" style="margin-right: 10px; margin-bottom: 10px;" class="btn btn-default" ng-click="gotoQuestion(category, $index)" ng-class="{'btn':true, 'btn-default': !answerSheet.answers[category][$index].length, 'btn-info': reviewMarkers[$index], 'btn-success': answerSheet.answers[category][$index].length}">
 								{{$index+1}}
 								</button>

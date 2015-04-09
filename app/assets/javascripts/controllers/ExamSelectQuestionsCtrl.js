@@ -27,6 +27,7 @@ angular.module('onlineScreening')
 			.then(function(data){
 				$scope.questions = data.questions;
 				$scope.selected_questions = data.selected_questions
+				$scope.scheme = data.scheme;
 				$scope.selection = [];
 				for(i = 0; i < $scope.selected_questions.length; i++){
 					$scope.selection[$scope.selected_questions[i]] = true;
@@ -34,6 +35,15 @@ angular.module('onlineScreening')
 			},function(){
 				alert("Error in fetching questions.");
 			});
+		};
+
+		$scope.getSelectionCountForWeightage = function(weightage){
+			var retVal = 0;
+			for(i = 0; i < $scope.questions.length; i++){
+				if($scope.questions[i].weightage == weightage && $scope.selection[$scope.questions[i].id])
+					retVal++;
+			}
+			return retVal;
 		};
 		
 

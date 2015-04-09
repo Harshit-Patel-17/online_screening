@@ -15,30 +15,35 @@ class Exam < ActiveRecord::Base
 		e
 	end
 
-	def set_scheme! test, question_category_id
-		qpw = Question.questions_per_weightage question_category_id
-		test.each do |key, value|
-			key = key.to_i
-			value = (value || "").to_i
-			return false unless qpw.has_key? key
-			return false if qpw[key] < value
+	def set_scheme! exam_scheme
+		category_wise_available_questions = Question.questions_per_weightage
+		puts category_wise_available_questions
+		exam_scheme.each do |question_category_id, scheme|
+			question_category_id = question_category_id.to_i
+			qpw = category_wise_available_questions[question_category_id]
+			scheme.each do |key, value|
+				key = key.to_i
+				value = (value || "").to_i
+				return false unless qpw.has_key? key
+				return false if qpw[key] < value
+			end
 		end
-		old_questions = self.questions.where('question_category_id = ?', question_category_id).select(:id)
-		old_question_ids = []
-		old_questions.each do |q|
-			old_question_ids.push(q.id)
-		end
-		old_exam_questions = ExamQuestion.where('question_id in (?)', old_question_ids)
+
+		old_exam_questions = self.exam_questions
 		old_exam_questions.delete_all
-		question_category_name = QuestionCategory.find(question_category_id).category_name
-		formatted_test = self.question_count_per_weightage || {}
-		formatted_test[question_category_name] = []
-		test.each do |key, value|
-			temp = Hash.new
-			temp[:weightage] = key.to_i
-			temp[:count] = value.to_i
-			formatted_test[question_category_name].push(temp) if temp[:count] > 0
+		formatted_test = {}
+
+		exam_scheme.each do |question_category_id, scheme|
+			question_category_name = QuestionCategory.find(question_category_id).category_name
+			formatted_test[question_category_name] = []
+			scheme.each do |key, value|
+				temp = Hash.new
+				temp[:weightage] = key.to_i
+				temp[:count] = value.to_i
+				formatted_test[question_category_name].push(temp) if temp[:count] > 0
+			end
 		end
+
 		self.question_count_per_weightage = formatted_test
 		self.save
 		return true
@@ -83,14 +88,17 @@ class Exam < ActiveRecord::Base
 		return true
 	end
 
-	def get_question_count_per_weightage question_category_id
+	def get_question_count_per_weightage
 		retVal = Hash.new
-		question_category_name = QuestionCategory.find(question_category_id).category_name
-		if self.question_count_per_weightage.has_key? question_category_name
-			self.question_count_per_weightage[question_category_name].each do |qcpw|
-				retVal[qcpw['weightage']] = qcpw['count']
+		self.question_count_per_weightage.each do |question_category_name, qcpw|
+			question_category_id = QuestionCategory.find_by_category_name(question_category_name).id
+			retVal[question_category_id] = Hash.new
+			qcpw.each do |i|
+				puts i
+				retVal[question_category_id][i["weightage"]] = i["count"]
 			end
 		end
+		puts retVal
 		return retVal
 	end
 

@@ -96,7 +96,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def questions_per_weightage
-		qpw = Question.questions_per_weightage params[:question_category_id]
+		qpw = Question.questions_per_weightage
 		respond_to do |format|
 			format.html {render json: {qpw: qpw}}
 			format.json {render json: {qpw: qpw}}
