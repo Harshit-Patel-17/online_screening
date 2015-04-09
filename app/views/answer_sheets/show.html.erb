@@ -7,7 +7,7 @@
 						<span><strong>Examination Paper</strong></span>
 					</div>
 					<div style="min-height: 300px" class="panel-body">
-						<strong>{{question_category}} : Question {{question_index+1}}</strong><br>
+						<strong>{{question_category}} : Question {{question_index+1}}</strong><small> [{{question.weightage}} mark(s)]</small><br>
 						<pre><code style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 2.5ex">{{question.question}}</code></pre>
 						<div class="col-sm-6">
 							<div ng-repeat="option in question.options track by $index">
