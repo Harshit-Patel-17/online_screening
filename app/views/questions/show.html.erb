@@ -1,1 +1,38 @@
-show.html.erb
+<div ng-controller="QuestionShowCtrl" ng-init="init(<%= @question.id %>)">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Question Details</strong></div>
+					<div class="panel-body">
+						<label>Question Text</label>
+						<p>{{question.question}}</p><hr>
+						<label ng-if="question.options.length">Options</label>
+						<ol ng-if="question.options.length">
+							<li ng-repeat="option in question.options track by $index">
+								{{option}}
+							</li><hr>
+						</ol>
+						<label>Answer</label>
+						<ol>
+							<li ng-if="question.qtype != 'numerical'" ng-repeat="answer in question.answers track by $index">
+								{{question.options[question.answers[$index]]}}
+							</li>
+						</ol>
+						<p ng-if="question.qtype == 'numerical'">{{question.answers[0]}}</p><hr>
+						<label>Question Type</label>
+						<p ng-if="question.qtype == 'mcq'">Single correct answer type</p>
+						<p ng-if="question.qtype == 'multi'">Multiple correct answer type</p>
+						<p ng-if="question.qtype == 'numerical'">Numerical answer type</p><hr>
+						<label>Weightage</label>
+						<p>{{question.weightage}}</p><hr>
+						<label>Image</label>
+						<img ng-if="question.image" src="{{'/images/'+question.image}}" style="width:100%"></img>
+						<p ng-if="!question.image">No image for this question.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

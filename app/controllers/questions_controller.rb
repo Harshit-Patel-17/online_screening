@@ -66,10 +66,10 @@ class QuestionsController < ApplicationController
 	end
 
 	def show
-		question = Question.find params[:id]
+		@question = Question.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {question: question.as_json}}
+			format.json {render json: {question: @question.as_json}}
 		end
 	end
 

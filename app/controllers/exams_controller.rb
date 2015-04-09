@@ -62,10 +62,10 @@ class ExamsController < ApplicationController
 	end
 
 	def show
-		exam = Exam.find params[:id]
+		@exam = Exam.find params[:id]
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {exam: exam}}
+			format.json {render json: {exam: @exam}}
 		end
 	end
 

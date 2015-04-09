@@ -1,1 +1,28 @@
-show.html.erb
+<div ng-controller="ExamShowCtrl" ng-init="init(<%= @exam.id %>)">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Exam Details</strong></div>
+					<div class="panel-body">
+						<label>Exam Name</label>
+						<p>{{exam.exam_name}}</p><hr>
+						<label>Start Window Time (SWT)</label>
+						<p>{{exam.start_window_time}}</p><hr>
+						<label>End Window Time (EWT)</label>
+						<p>{{exam.end_window_time}}</p><hr>
+						<label>Duration</label>
+						<p>{{exam.duration_mins}} minutes</p><hr>
+						<label>Subjects in Exam</label>
+						<ul>
+							<li ng-repeat="(key, value) in exam.question_count_per_weightage">
+								{{key}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

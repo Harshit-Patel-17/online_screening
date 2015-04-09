@@ -1,9 +1,19 @@
-<div ng-controller="CollegeNewCtrl">
+<div class="col-sm-4"></div>
+<div class="col-sm-4" ng-controller="CollegeNewCtrl">
 	<form method="post" action="/colleges" enctype="application/json">
-		<ng-form>
-			<input type="text" name="college[institute_name]" placeholder="College name" required></input>
-			<input type="text" name="college[branch_name]" placeholder="Branch name" required></input>
-		</ng-form>
-		<button type="submit">Submit</button>
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Create College</strong></div>
+			<div class="panel-body">
+				<ng-form>
+					<label>College Name</label>
+					<input class="form-control" type="text" name="college[institute_name]" placeholder="College name" required></input><br>
+					<label>Branch Name</label>
+					<input class=" form-control" type="text" name="college[branch_name]" placeholder="Branch name" required></input><br>
+				</ng-form>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Submit</button>
+			</div>
+		</div>
 	</form>
 </div>
