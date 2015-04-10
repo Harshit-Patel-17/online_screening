@@ -1,10 +1,13 @@
 <div ng-controller="UserIndexCtrl">
-	<h4>Admins</h4>
-	<div class="gridStyle" ng-grid="adminGridOptions">
-	</div>
-	<br><hr>
-	<h4>Users</h4>
-	<form class="form-inline">
+	<ul class="nav nav-tabs">
+		<li ng-class="{active: active_view == 'users'}">
+			<a ng-click="showUsers()">Users</a>
+		</li>
+		<li ng-class="{active: active_view == 'admins'}">
+			<a ng-click="showAdmins()">Admins</a>
+		</li>
+	</ul><br>
+	<form ng-if="active_view == 'users'" class="form-inline">
 		<input class="form-control" type="text" ng-model="params.first_name" placeholder="First name"></input>
 		<input class="form-control" type="text" ng-model="params.email" placeholder="Email"></input>
 		<input class="form-control" type="number" ng-model="params.college_id" placeholder="College Id"></input>
@@ -15,6 +18,6 @@
 			<i class="glyphicon glyphicon-remove"></i>
 		</button>
 	</form><br>
-	<div class="gridStyle" ng-grid="userGridOptions">
+	<div class="gridStyle" ng-grid="gridOptions">
 	</div>
 </div>

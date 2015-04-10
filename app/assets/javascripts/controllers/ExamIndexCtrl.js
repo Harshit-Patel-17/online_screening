@@ -2,24 +2,66 @@ angular.module('onlineScreening')
 .controller('ExamIndexCtrl', [
 	'$scope',
 	'$http',
+	'$timeout',
 	'Restangular',
-	function($scope, $http, $rest){
+	function($scope, $http, $timeout, $rest){
 		$scope.getExams = function(){
 			$rest.all('exams.json').get('')
 			.then(function(data){
 				$scope.exams = data.exams;
+				$scope.current_server_time = parseInt(Date.parse(data.current_server_time)/1000);
+				$timeout($scope.updateTime, 1000);
+				$scope.classifyExams();
+				$scope.showCurrentExams();
 			},function(){
 				alert("Error in fetching exams.");
 			});
 		};
+
+		$scope.updateTime = function(){
+			$scope.current_server_time++;
+			$scope.classifyExams();
+			$timeout($scope.updateTime, 1000);
+		};
 		
+		$scope.classifyExams = function(){
+			$scope.upcoming_exams = [];
+			$scope.past_exams = [];
+			$scope.current_exams = [];
+			for(i = 0; i < $scope.exams.length; i++){
+				start_time = parseInt(Date.parse($scope.exams[i].start_window_time)/1000);
+				end_time = parseInt(Date.parse($scope.exams[i].end_window_time)/1000);
+				if($scope.current_server_time > end_time)
+					$scope.past_exams.push($scope.exams[i]);
+				else if($scope.current_server_time > start_time)
+					$scope.current_exams.push($scope.exams[i]);
+				else
+					$scope.upcoming_exams.push($scope.exams[i]);
+			}
+		};
+
+		$scope.showCurrentExams = function(){
+			$scope.active_view = "current_exams";
+			$scope.gridData = $scope.current_exams;
+		};
+
+		$scope.showUpcomingExams = function(){
+			$scope.active_view = "upcoming_exams";
+			$scope.gridData = $scope.upcoming_exams;
+		};
+
+		$scope.showPastExams = function(){
+			$scope.active_view = "past_exams";
+			$scope.gridData = $scope.past_exams;
+		};
 
 		$scope.gridOptions = {
-	      data: 'exams',
+	      data: 'gridData',
 	      columnDefs: 'columnDefs',
 	      showFooter: true,
 	      plugins: [new ngGridFlexibleHeightPlugin()]
    	 	};
+
 
    	 	$scope.deleteExam = function(id){
    	 		if(!confirm("Are you sure about deleting the exam?"))
