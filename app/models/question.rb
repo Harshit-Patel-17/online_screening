@@ -46,7 +46,7 @@ class Question < ActiveRecord::Base
 	end
 
 	def upload_image! image
-		name = Time.now.to_s + image.original_filename
+		name = Digest::MD5.hexdigest(Time.now.to_s)[0..9] + image.original_filename
 		directory = "public/images"
 		path = File.join(directory, name)
 		File.open(path, "wb"){|f| f.write(image.read)}
