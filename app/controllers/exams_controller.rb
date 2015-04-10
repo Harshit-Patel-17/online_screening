@@ -1,6 +1,7 @@
 class ExamsController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authenticate_user!
 	before_action :authorize_admin, except: [:my_exams]
 	before_action :authorize_user, only: [:my_exams]
 

@@ -11,7 +11,6 @@ angular.module('onlineScreening')
 			$rest.all('users/non_admins.json').get('', $scope.params)
 			.then(function(data){
 				$scope.users = data.users;
-        $scope.showUsers();
 			},function(){
 				alert("Error in fetching users.");
 			});
@@ -91,4 +90,5 @@ angular.module('onlineScreening')
     ];
 
     $scope.getAdmins();
+    $scope.showUsers();
 	}]);

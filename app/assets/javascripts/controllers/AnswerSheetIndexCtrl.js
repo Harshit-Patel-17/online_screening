@@ -42,7 +42,7 @@ angular.module('onlineScreening')
    	 		});
    	 	};
 
-	    var show_path = "{{'/answer_sheets/'+row.getProperty('id')}}";
+	    var show_path = "{{'/answer_sheets/'+row.getProperty('id') + '/review'}}";
 	    var delete_call = "deleteAnswerSheet(row.getProperty('id'))";
 	    var linkCellTemplate = '<a data-method="get" href="'+ show_path +'"><i class="glyphicon glyphicon-eye-open"></i></a>'
 	    						+ ' <a ng-click="' + delete_call + '"><i class="glyphicon glyphicon-remove"></i></a>';

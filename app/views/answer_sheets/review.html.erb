@@ -1,0 +1,26 @@
+<div class="col-sm-3"></div>
+<div class="col-sm-6" ng-controller="AnswerSheetReviewCtrl" ng-init="init(<%= @answer_sheet.id %>)">
+	<div class="panel panel-primary">
+		<div class="panel-heading"><strong>Answer Sheet of {{user.first_name}} ({{user.student_id}})</strong></div>
+		<div class="panel-body">
+			<div ng-repeat="(category, question_ids) in answerSheet.questions">
+				<h3>{{category}}</h3>
+				<ol>
+					<li ng-repeat="qid in question_ids">
+							<div>{{questions[qid].question}}</div>
+							<ul>
+								<li ng-repeat="option_id in answers[qid]">
+									<span ng-if="questions[qid].qtype != 'numerical'">
+										{{questions[qid].options[option_id]}}
+									</span>
+									<span ng-if="questions[qid].qtype == 'numerical'">
+										{{option_id}}
+									</span>
+								</li>
+							</ul><br>
+					</li><hr>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>

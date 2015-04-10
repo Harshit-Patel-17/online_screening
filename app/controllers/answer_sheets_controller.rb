@@ -1,8 +1,9 @@
 class AnswerSheetsController < ApplicationController
 	respond_to :html, :json
 
+	before_action :authenticate_user!
 	before_action :authorize_admin, only: [:index, :destroy]
-	before_action :authorize_user, except: [:index, :destroy]
+	before_action :authorize_user, only: [:create, :update]
 
 	def index
 		respond_to do |format|
@@ -79,6 +80,10 @@ class AnswerSheetsController < ApplicationController
 			format.html {render json: {reply: message}}
 			format.json {render json: {reply: message}}
 		end
+	end
+
+	def review
+		@answer_sheet = AnswerSheet.find params[:id]
 	end
 
 	def time_up
