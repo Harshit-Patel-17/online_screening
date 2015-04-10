@@ -50,6 +50,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
   end
 
+  def show
+    respond_to do |format|
+      format.json {render json: {user: User.find(params[:id])}}
+    end
+  end
+
   def mass_new
   end
 

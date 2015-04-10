@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get 'users/non_admins', :to => 'users/registrations#users_index'
     get 'users/admins', :to => 'users/registrations#admins_index'
     devise_for :users, :controllers => { :registrations => "users/registrations" }
+    get 'users/:id', :to => 'users/registrations#show'
   end
 
   namespace "questions" do
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
   resources :exams
 
   namespace "answer_sheets" do
+    get ':id/review', action: 'review', as: 'review'
     get 'time_up', action: 'time_up', as: 'time_up'
     post ':id', action: 'update', as: 'update'
   end
