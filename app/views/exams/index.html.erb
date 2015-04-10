@@ -1,4 +1,17 @@
 <div ng-controller="ExamIndexCtrl">
+	<div class="container-fluid">
+		<ul class="nav nav-tabs">
+			<li ng-class="{active: active_view == 'current_exams'}">
+				<a ng-click="showCurrentExams()">Current Exams</a>
+			</li>
+			<li ng-class="{active: active_view == 'upcoming_exams'}">
+				<a ng-click="showUpcomingExams()">Upcoming Exams</a>
+			</li>
+			<li ng-class="{active: active_view == 'past_exams'}">
+				<a ng-click="showPastExams()">Past Exams</a>
+			</li>
+		</ul><br>
+	</div>
 	<div class="gridStyle" ng-grid="gridOptions">
 	</div>
 </div>

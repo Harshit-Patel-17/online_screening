@@ -11,6 +11,7 @@ angular.module('onlineScreening')
 			$rest.all('users/non_admins.json').get('', $scope.params)
 			.then(function(data){
 				$scope.users = data.users;
+        $scope.showUsers();
 			},function(){
 				alert("Error in fetching users.");
 			});
@@ -36,15 +37,21 @@ angular.module('onlineScreening')
 			});
 		};
 		
-		$scope.adminGridOptions = {
-      data: 'admins',
-      columnDefs: 'adminsColumnDefs',
-      plugins: [new ngGridFlexibleHeightPlugin()]
- 	 	};
+    $scope.showUsers = function(){
+      $scope.gridData = $scope.users;
+      $scope.columnDefs = $scope.usersColumnDefs;
+      $scope.active_view = 'users';
+    };
 
-		$scope.userGridOptions = {
-      data: 'users',
-      columnDefs: 'usersColumnDefs',
+    $scope.showAdmins = function(){
+      $scope.gridData = $scope.admins;
+      $scope.columnDefs = $scope.adminsColumnDefs;
+      $scope.active_view = 'admins';
+    };
+
+		$scope.gridOptions = {
+      data: 'gridData',
+      columnDefs: 'columnDefs',
       enablePaging: true,
     	pagingOptions: $scope.pagingOptions,
     	showFooter: true,

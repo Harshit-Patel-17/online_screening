@@ -7,7 +7,7 @@ class ExamsController < ApplicationController
 	def index
 		respond_to do |format|
 			format.html {}
-			format.json {render json: { exams: Exam.all }}
+			format.json {render json: { exams: Exam.all, current_server_time: DateTime.now.utc }}
 		end
 	end
 
