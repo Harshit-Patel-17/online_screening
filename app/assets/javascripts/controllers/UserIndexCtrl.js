@@ -6,18 +6,22 @@ angular.module('onlineScreening')
 	function($scope, $http, $rest){
 		$scope.params = {};
 		$scope.getUsers = function(currentPage, pageSize){
+      currentPage = $scope.pagingOptions.currentPage;
+      pageSize = $scope.pagingOptions.pageSize;
 			$scope.params.offset = (currentPage-1) * pageSize;
 			$scope.params.limit = pageSize;
 			$rest.all('users/non_admins.json').get('', $scope.params)
 			.then(function(data){
 				$scope.users = data.users;
+        $scope.showUsers();
 			},function(){
 				alert("Error in fetching users.");
 			});
 		};
 
 		$scope.$watch('pagingOptions', function(){
-			$scope.getUsers($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+      if($scope.active_view == 'users')
+			 $scope.getUsers();
 		}, true);
 
 		$scope.pagingOptions = {
@@ -63,7 +67,7 @@ angular.module('onlineScreening')
  	 		$rest.one('users', id).one('destroy').remove()
  	 		.then(function(data){
  	 			$scope.message = data.reply;
- 	 			$scope.getUsers($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+ 	 			$scope.getUsers();
         $scope.getAdmins();
  	 		}, function(){
  	 			alert('Delete request failed.')

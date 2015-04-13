@@ -27,6 +27,7 @@
 						<div class="pull-left">
 							<button class="btn btn-default" ng-if="!reviewMarkers[question_index]" ng-click="markForReview(question_index)">Mark For Review</button>
 							<button class="btn btn-default" ng-if="reviewMarkers[question_index]" ng-click="unmarkForReview(question_index)">Unmark For Review</button>
+							<button class="btn btn-primary" ng-click="showAnswerSheet()">Finish</button>
 						</div>
 						<div style="text-align:right">
 							<button class="btn btn-primary" type='button' ng-click="prevQuestion()" ng-disabled="!prevEnabled">Previous</button>

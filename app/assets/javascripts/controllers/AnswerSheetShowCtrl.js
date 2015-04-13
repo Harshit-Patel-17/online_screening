@@ -161,4 +161,8 @@ angular.module('onlineScreening')
 		$scope.unmarkForReview = function(index){
 			$scope.reviewMarkers[index] = false;
 		};
+
+		$scope.showAnswerSheet = function(){
+			window.location.href = '/answer_sheets/' + $scope.answerSheet.id + '/review';
+		};
 	}]);
