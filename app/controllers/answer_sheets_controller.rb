@@ -16,28 +16,35 @@ class AnswerSheetsController < ApplicationController
 	end
 
 	def create
-		params[:answer_sheet][:user_id] = current_user.id
-		params[:answer_sheet][:start_test_ip] = request.remote_ip
-		answer_sheet = AnswerSheet.set params[:answer_sheet]
-		if answer_sheet
-			message = 'AnswerSheet successfully created'
-		else
-			message = 'AnswerSheet creation failed'
+		answer_sheets = AnswerSheet.where('exam_id = ? and user_id = ?', params[:answer_sheet][:exam_id], current_user.id)
+		puts answer_sheets
+		if answer_sheets.length != 0
+			answer_sheet = answer_sheets[0]
+			exam = answer_sheet.exam
+			if !exam.is_window_open?
+				message = "Exam window is not open"
+				is_done = false
+			elsif answer_sheet.start_test_ip != request.remote_ip
+				message = "You cannot resume exam from this IP. Please contact administrator."
+				is_done = false
+			else
+				message = "success"
+				is_done = true
+			end
+		else 
+			params[:answer_sheet][:user_id] = current_user.id
+			params[:answer_sheet][:start_test_ip] = request.remote_ip
+			answer_sheet = AnswerSheet.set params[:answer_sheet]
+			message = "success"
+			is_done = true
 		end
 		respond_to do |format|
-			format.html {
-				if answer_sheet
-					if answer_sheet.end_time >= Time.now
-						redirect_to answer_sheet_path(answer_sheet.id)
-					else
-						redirect_to "/answer_sheets/time_up"
-					end
+			format.json { 
+				if is_done
+					render json: {reply: message, id: answer_sheet.id} 
 				else
-					redirect_to "/exams/my_exams"
+					render json: {reply: message}
 				end
-			}
-			format.json {
-				render json: {reply: message, id: answer_sheet.id}
 			}
 		end
 	end
@@ -48,7 +55,9 @@ class AnswerSheetsController < ApplicationController
 	def update
 		answersheet = AnswerSheet.find params[:id]
 		timer_active = answersheet.end_time >= DateTime.now and answersheet.start_time <= DateTime.now
-		if timer_active and answersheet.update params[:answer_sheet].symbolize_keys
+		user_valid = current_user.id == answersheet.user_id
+		ip_correct = answersheet.start_test_ip == request.remote_ip
+		if timer_active and user_valid and ip_correct and answersheet.update params[:answer_sheet].symbolize_keys
 			message = 'AnswerSheet successfully edited'
 		else
 			message = 'AnswerSheet modification failed'
@@ -65,7 +74,7 @@ class AnswerSheetsController < ApplicationController
 		answer_sheet[:currentServerTime] = DateTime.now.utc
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {answerSheet: answer_sheet}}
+			format.json { render json: {answerSheet: answer_sheet}}
 		end
 	end
 
@@ -87,6 +96,29 @@ class AnswerSheetsController < ApplicationController
 	end
 
 	def time_up
+	end
+
+	def change_ip
+		respond_to do |format|
+			format.html {}
+			format.json {
+			    answer_sheets = AnswerSheet.get_for_users(params).select(:id, :user_id, :start_test_ip)
+			    answer_sheets_with_user = []
+			    answer_sheets.each do |as|
+			    	answer_sheets_with_user.push(as.attributes.merge(as.user.attributes.except("id")))
+			    end
+			    render json: {answerSheets: answer_sheets_with_user}
+			}
+		end
+	end
+
+	def update_ip
+		answersheet = AnswerSheet.find params[:id]
+		answersheet.start_test_ip = params[:start_test_ip]
+		answersheet.save
+		respond_to do |format|
+			format.json { render json: {reply: "success"}}
+		end
 	end
 
 	private

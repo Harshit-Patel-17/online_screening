@@ -6,21 +6,11 @@ class AnswerSheet < ActiveRecord::Base
   
 	def self.set answer_sheet
 		answer_sheet = answer_sheet.symbolize_keys
-		as = AnswerSheet.where('exam_id = ? and user_id = ?', answer_sheet[:exam_id], answer_sheet[:user_id])
-		
-		return as[0] unless as.length == 0
+
+		exam_id = answer_sheet[:exam_id]
+		exam = Exam.find(exam_id)
 		
 		as = AnswerSheet.new(answer_sheet)
-
-		exam_id = as.exam_id
-		exam = Exam.find(exam_id)
-		swt = exam.start_window_time
-		ewt = exam.end_window_time
-		now = DateTime.now.utc
-		window_active = swt <= now and ewt >= now
-		unless window_active
-			return false
-		end
 		as.start_time = DateTime.now
 		as.end_time = as.start_time + exam.duration_mins.minutes
 		question_ids = exam.exam_questions.select(:question_id)
@@ -83,5 +73,15 @@ class AnswerSheet < ActiveRecord::Base
 			retValue.push(answer_sheet_json)
 		end
 		retValue
+	end
+
+	def self.get_for_users params
+		users = User.all
+		users = users.where('first_name like ?', params[:first_name] + "%") if params[:first_name] and params[:first_name] != ""
+	    users = users.where('email like ?', params[:email] + "%") if params[:email] and params[:email] != ""
+	    users = users.where('college_id = ?', params[:college_id] + "%") if params[:college_id] and params[:college_id] != ""
+	    user_ids = users.select(:id)
+
+	    answer_sheets = AnswerSheet.where("exam_id = ? and user_id in (?)", params[:exam_id], user_ids)
 	end
 end

@@ -51,11 +51,11 @@ class User < ActiveRecord::Base
     user_role_id = Role.find_by_role_name('user').id
     user_ids = Privilege.where('role_id = ?', user_role_id).select(:user_id)
     users = User.where('id in (?)', user_ids)
-    users = users.offset(params[:offset]) if params[:offset]
-    users = users.limit(params[:limit]) if params[:limit]
     users = users.where('first_name like ?', params[:first_name] + "%") if params[:first_name] and params[:first_name] != ""
     users = users.where('email like ?', params[:email] + "%") if params[:email] and params[:email] != ""
     users = users.where('college_id = ?', params[:college_id] + "%") if params[:college_id] and params[:college_id] != ""
+    users = users.offset(params[:offset]) if params[:offset]
+    users = users.limit(params[:limit]) if params[:limit]
     users
   end
 

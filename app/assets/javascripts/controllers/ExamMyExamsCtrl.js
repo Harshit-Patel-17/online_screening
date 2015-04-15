@@ -59,7 +59,11 @@ angular.module('onlineScreening')
 			params = {"answer_sheet": {"exam_id": exam_id}};
 			$rest.all('answer_sheets.json').post(params)
 			.then(function(data){
-				window.location.href = "/answer_sheets/" + data.id;
+				if(data.id)
+					window.location.href = "/answer_sheets/" + data.id;
+				else{
+					alert(data.reply);
+				}
 			}, function(){
 				alert("Start exam request failed.");
 			});

@@ -119,4 +119,12 @@ class Exam < ActiveRecord::Base
 		end
 		return retVal
 	end
+
+	def is_window_open?
+		exam = self
+		swt = exam.start_window_time
+		ewt = exam.end_window_time
+		now = DateTime.now.utc
+		window_open = swt <= now and ewt >= now
+	end
 end

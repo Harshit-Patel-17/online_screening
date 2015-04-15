@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   namespace "answer_sheets" do
     get ':id/review', action: 'review', as: 'review'
     get 'time_up', action: 'time_up', as: 'time_up'
+    post ':id/change_ip', action: 'update_ip', as: 'update_ip'
+    get 'change_ip', action: 'change_ip', as: 'change_ip'
     post ':id', action: 'update', as: 'update'
   end
   resources :answer_sheets
