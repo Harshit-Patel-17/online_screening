@@ -1,5 +1,6 @@
 source 'http://rubygems.org'
 
+gem 'codemirror-rails'
 gem 'tzinfo-data'
 gem 'spreadsheet'
 gem 'email_verifier'

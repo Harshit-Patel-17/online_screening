@@ -13,6 +13,7 @@
  *= require angular-ng-grid-rails
  *= require bootstrap-formhelpers
  *= require bootstrap-datetimepicker
+ *= require codemirror
  *= require_tree .
  *= require_self
  */

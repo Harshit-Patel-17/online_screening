@@ -21,4 +21,5 @@
 //= require angular-ui-bootstrap-tpls
 //= require moment
 //= require bootstrap-datetimepicker
+//= require codemirror
 //= require_tree .
