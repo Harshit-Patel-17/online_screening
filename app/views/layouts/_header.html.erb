@@ -11,14 +11,18 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+        <% if can? :give, :exam %>
         <li>
-        	<% if can? :manage, :site %>
-        	<%= link_to "Home", exams_path, :method => "get" %>
-        	<% elsif can? :give, :exam %>
-        	<%= link_to "My Exams", my_exams_path, :method => "get" %>
-        	<% end %>
+        	<%= link_to "My Exams", exams_my_exams_path, :method => "get" %>
         </li>
+        <li>
+          <%= link_to "My Programming Exams", programming_exams_my_exams_path, :method => "get" %>
+        </li>
+        <% end %>
         <% if can? :manage, :site %>
+        <li>
+          <%= link_to "Home", exams_path, :method => "get" %>
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Exams <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">

@@ -1,37 +1,37 @@
 angular.module('onlineScreening')
-.controller('AnswerSheetChangeIpCtrl', [
+.controller('ProgrammingAnswerSheetChangeIpCtrl', [
 	'$scope',
 	'$http',
   '$modal',
 	'Restangular',
 	function($scope, $http, $modal, $rest){
 		$scope.params = {};
-    $scope.exam = {};
-		$scope.getAnswerSheets = function(){
+    $scope.programming_exam = {};
+		$scope.getProgrammingAnswerSheets = function(){
       currentPage = $scope.pagingOptions.currentPage;
       pageSize = $scope.pagingOptions.pageSize;
 			$scope.params.offset = (currentPage-1) * pageSize;
 			$scope.params.limit = pageSize;
-      $scope.params.exam_id = $scope.exam.id;
-			$rest.all('answer_sheets/change_ip.json').get('', $scope.params)
+      $scope.params.programming_exam_id = $scope.programming_exam.id;
+			$rest.all('programming_answer_sheets/change_ip.json').get('', $scope.params)
 			.then(function(data){
-				$scope.answerSheets = data.answerSheets;
+				$scope.programmingAnswerSheets = data.programmingAnswerSheets;
 			},function(){
-				alert("Error in fetching answer sheets.");
+				alert("Error in fetching programming answer sheets.");
 			});
 		};
 
-    $scope.getExams = function(){
-      $rest.all('exams.json').get('')
+    $scope.getProgrammingExams = function(){
+      $rest.all('programming_exams.json').get('')
       .then(function(data){
-        $scope.exams = data.exams;
+        $scope.programming_exams = data.programming_exams;
       },function(){
-        alert("Error in fetching exams.");
+        alert("Error in fetching programming_exams.");
       });
     };
 
 		$scope.$watch('pagingOptions', function(){
-			 $scope.getAnswerSheets();
+			 $scope.getProgrammingAnswerSheets();
 		}, true);
 
 		$scope.pagingOptions = {
@@ -42,7 +42,7 @@ angular.module('onlineScreening')
     }; 
 
 		$scope.gridOptions = {
-      data: 'answerSheets',
+      data: 'programmingAnswerSheets',
       columnDefs: 'columnDefs',
       enablePaging: true,
     	pagingOptions: $scope.pagingOptions,
@@ -68,9 +68,9 @@ angular.module('onlineScreening')
           return;
         }
         var params = {"start_test_ip": ip};
-        $rest.one('answer_sheets', answerSheetId).one('change_ip.json').post('', params)
+        $rest.one('programming_answer_sheets', answerSheetId).one('change_ip.json').post('', params)
         .then(function(data){
-          $scope.getAnswerSheets();
+          $scope.getProgrammingAnswerSheets();
         }, function(){
 
         });
@@ -91,7 +91,7 @@ angular.module('onlineScreening')
       { field: 'href', displayName: 'Links', enableCellEdit: false, cellTemplate: linkCellTemplate}
     ];
 
-    $scope.getExams();
+    $scope.getProgrammingExams();
 	}]);
 
 angular.module('onlineScreening')

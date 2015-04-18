@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :questions 
 
   namespace "exams" do
+    get 'my_exams', action: 'my_exams', as: 'my_exams'
     get 'timezones', action: 'timezones', as: 'timezones'
     post ':id/scheme', action: 'set_scheme', as: 'set_scheme'
     get ':id/scheme', action: 'show_scheme', as: 'show_scheme'
@@ -51,7 +52,30 @@ Rails.application.routes.draw do
   end
   resources :question_categories
 
-  get 'my_exams', to: 'exams#my_exams'
+  resources :programming_tasks
+
+  namespace "programming_exams" do
+    get 'my_exams', action: 'my_exams', as: 'my_exams'
+    get 'timezones', action: 'timezones', as: 'timezones'
+    post ':id/programming_tasks', action: 'set_programming_tasks', as: 'set_programming_tasks'
+    get ':id/programming_tasks', action: 'select_programming_tasks', as: 'select_programming_tasks'
+    post ':id/colleges', action: 'set_colleges', as: 'set_colleges'
+    get ':id/colleges', action: 'select_colleges', as: 'select_colleges'
+    post ':id', action: 'update', as: 'update'
+  end
+  resources :programming_exams
+
+  namespace "programming_answer_sheets" do
+    get ':id/review', action: 'review', as: 'review'
+    get 'time_up', action: 'time_up', as: 'time_up'
+    post ':id/change_ip', action: 'update_ip', as: 'update_ip'
+    get 'change_ip', action: 'change_ip', as: 'change_ip'
+    get ':id/get_program', action:'get_program', as: 'get_program'
+    post ':id/save_program', action: 'save_program', as: 'save_program'
+    post ':id/check_program', action: 'check_program', as: 'check_program'
+    post ':id/run_program', action: 'run_program', as: 'run_program'
+  end
+  resources :programming_answer_sheets
 
   root to: "welcome#welcome"
   # The priority is based upon order of creation: first created -> highest priority.

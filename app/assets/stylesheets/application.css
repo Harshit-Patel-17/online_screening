@@ -14,6 +14,7 @@
  *= require bootstrap-formhelpers
  *= require bootstrap-datetimepicker
  *= require codemirror
+ *= require codemirror/themes/monokai
  *= require_tree .
  *= require_self
  */

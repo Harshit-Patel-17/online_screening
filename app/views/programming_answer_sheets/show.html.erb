@@ -1,0 +1,92 @@
+<div ng-controller="ProgrammingAnswerSheetShowCtrl" ng-init="init(<%= @programming_answer_sheet.id %>)">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Timer(mm:ss)</strong>
+					</div>
+					<div class="panel-body">
+						<center>
+							<i class="glyphicon glyphicon-time"></i>
+							<h4 style="display: inline">{{timer.mins + ':' + timer.secs}}</h4>
+						</center>	
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Programming Tasks</strong>
+					</div>
+					<div class="panel-body">
+						<ul class="nav nav-pills nav-stacked">
+							<li ng-class="{'active': programmingTask.id == programming_task_id}" ng-repeat="programming_task_id in programmingAnswerSheet.programming_tasks track by $index">
+								<a ng-click="changeProgram(programming_task_id)">{{$index+1}}. {{programmingAnswerSheet.task_names[$index]}}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Coding Area</strong>
+					</div>
+					<div class="panel-body">
+						<strong>Source Code</strong>
+						<textarea ui-codemirror="codeOption" ng-model="programText"></textarea><br>
+						<button type="button" class="btn btn-default" ng-click="saveProgram()">Save</button>
+						<button type="button" class="btn btn-default" ng-click="getStdin()">Run</button>
+						<button type="button" class="btn btn-default" ng-click="checkProgram()">Submit</button><hr>
+						<strong>Task</strong>
+						<p>{{programmingTask.task}}</p><br>
+						<strong>Sample Input</strong>
+						<pre><code>{{programmingTask.sample_input}}</code></pre><br>
+						<strong>Sample Output</strong>
+						<pre><code>{{programmingTask.sample_output}}</code></pre><br>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Compilation Log</strong>
+					</div>
+					<div class="panel-body">
+						<textarea ui-codemirror="compilationLogOption" ng-model="compilationLog"></textarea>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Standard Input</strong>
+					</div>
+					<div class="panel-body">
+						<textarea ui-codemirror="ioOption" ng-model="stdin"></textarea>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Standard Output</strong>
+					</div>
+					<div class="panel-body">
+						<textarea ui-codemirror="ioOption" ng-model="stdout"></textarea>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>
+
+<script type="text/ng-template" id="get_stdin.html">
+	<div class="modal-header">
+	    <h3 class="modal-title">Standard Input</h3>
+	</div>
+	<div class="modal-body">
+	    <textarea class="form-control" ng-model="stdin"></textarea>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="ok()">OK</button>
+	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

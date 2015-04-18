@@ -1,12 +1,12 @@
 angular.module('onlineScreening')
-.controller('ExamMyExamsCtrl', [
+.controller('ProgrammingExamMyExamsCtrl', [
 	'$scope',
 	'$http',
 	'$timeout',
 	'Restangular',
 	function($scope, $http, $timeout, $rest){
 		$scope.getMyExams = function(){
-			$rest.all('exams/my_exams.json').get('')
+			$rest.all('programming_exams/my_exams.json').get('')
 			.then(function(data){
 				$scope.myExams = data.myExams;
 				$scope.currentServerTime = data.currentServerTime;
@@ -55,17 +55,17 @@ angular.module('onlineScreening')
 			$timeout($scope.refreshTime, 1000);
 		};
 
-		$scope.startExam = function(exam_id){
-			params = {"answer_sheet": {"exam_id": exam_id}};
-			$rest.all('answer_sheets.json').post(params)
+		$scope.startExam = function(programming_exam_id){
+			params = {"programming_answer_sheet": {"programming_exam_id": programming_exam_id}};
+			$rest.all('programming_answer_sheets.json').post(params)
 			.then(function(data){
 				if(data.id)
-					window.location.href = "/answer_sheets/" + data.id;
+					window.location.href = "/programming_answer_sheets/" + data.id;
 				else{
 					alert(data.reply);
 				}
 			}, function(){
-				alert("Start exam request failed.");
+				alert("Start programming exam request failed.");
 			});
 		};
 

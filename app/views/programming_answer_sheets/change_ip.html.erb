@@ -1,12 +1,12 @@
-<div ng-controller="AnswerSheetChangeIpCtrl">
+<div ng-controller="ProgrammingAnswerSheetChangeIpCtrl">
 	<form class="form-inline">
 		<input class="form-control" type="text" ng-model="params.first_name" placeholder="First name"></input>
 		<input class="form-control" type="text" ng-model="params.email" placeholder="Email"></input>
 		<input class="form-control" type="number" ng-model="params.college_id" placeholder="College Id"></input>
-		<select ng-model="exam" ng-options="exam.exam_name for exam in exams track by exam.id">
-			<option value="" style="display: none">Select Exam</option>
+		<select ng-model="programming_exam" ng-options="programming_exam.exam_name for programming_exam in programming_exams track by programming_exam.id">
+			<option value="" style="display: none">Select Programming Exam</option>
 		</select>
-		<button class="btn btn-default" type="button" ng-click="getAnswerSheets()">
+		<button class="btn btn-default" type="button" ng-click="getProgrammingAnswerSheets()">
 			<i class="glyphicon glyphicon-search"></i>
 		</button>
 		<button class="btn btn-default" type="reset">

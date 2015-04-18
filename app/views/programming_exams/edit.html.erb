@@ -1,0 +1,25 @@
+<div class="col-sm-4"></div>
+<div class="col-sm-4" ng-controller="ProgrammingExamEditCtrl" ng-init="init(<%= @programming_exam_id %>)">
+	<form method="post" action="/programming_exams/<%= @programming_exam_id %>" enctype="multipart/form-data" ng-submit="adjustTime()">
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Edit Programming Exam</strong></div>
+			<div class="panel-body">
+				<ng-form>
+					<label>Exam Name</label>
+					<input class="form-control" type="text" name="programming_exam[exam_name]" ng-model="programming_exam.exam_name" placeholder="Exam name" required></input><br>
+					<label>Duration in Minutes</label>
+					<input class="form-control" type="number" name="programming_exam[duration_mins]" ng-model="programming_exam.duration_mins" placeholder="Exam duration (mins)" required></input><br>
+					<label>Timezone</label>
+					<select class="form-control" ng-model="programming_exam.timezone" name="programming_exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone"></select><br>
+					<label>Start Window Time</label>
+					<input class="form-control" type="datetime-local" name="programming_exam[start_window_time]" id="exam_start_window_time" ng-model="programming_exam.start_window_time" placeholder="Start window time" required></input><br>
+					<label>End Window Time</label>
+					<input class="form-control" type="datetime-local" name="programming_exam[end_window_time]" id="exam_end_window_time" ng-model="programming_exam.end_window_time" placeholder="End window time" required></input><br>
+				</ng-form>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Update</button>
+				<button class="btn btn-default" type="reset">Reset</button>
+			</div>
+	</form>
+</div>

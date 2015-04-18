@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408111926) do
+ActiveRecord::Schema.define(version: 20150418112736) do
 
   create_table "answer_sheets", force: :cascade do |t|
     t.integer  "exam_id",       limit: 4
@@ -82,6 +82,64 @@ ActiveRecord::Schema.define(version: 20150408111926) do
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
   add_index "privileges", ["user_id"], name: "index_privileges_on_user_id", using: :btree
 
+  create_table "programming_answer_sheets", force: :cascade do |t|
+    t.integer  "programming_exam_id", limit: 4
+    t.integer  "user_id",             limit: 4
+    t.text     "programming_tasks",   limit: 65535
+    t.text     "marks",               limit: 65535
+    t.integer  "score",               limit: 4
+    t.datetime "start_time"
+    t.string   "start_test_ip",       limit: 255
+    t.datetime "end_time"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "programming_answer_sheets", ["programming_exam_id"], name: "index_programming_answer_sheets_on_programming_exam_id", using: :btree
+  add_index "programming_answer_sheets", ["user_id"], name: "index_programming_answer_sheets_on_user_id", using: :btree
+
+  create_table "programming_exam_colleges", force: :cascade do |t|
+    t.integer  "programming_exam_id", limit: 4
+    t.integer  "college_id",          limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "programming_exam_colleges", ["college_id"], name: "index_programming_exam_colleges_on_college_id", using: :btree
+  add_index "programming_exam_colleges", ["programming_exam_id"], name: "index_programming_exam_colleges_on_programming_exam_id", using: :btree
+
+  create_table "programming_exam_tasks", force: :cascade do |t|
+    t.integer  "programming_exam_id", limit: 4
+    t.integer  "programming_task_id", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "programming_exam_tasks", ["programming_exam_id"], name: "index_programming_exam_tasks_on_programming_exam_id", using: :btree
+  add_index "programming_exam_tasks", ["programming_task_id"], name: "index_programming_exam_tasks_on_programming_task_id", using: :btree
+
+  create_table "programming_exams", force: :cascade do |t|
+    t.integer  "duration_mins",     limit: 4
+    t.string   "exam_name",         limit: 255
+    t.text     "programming_tasks", limit: 65535
+    t.integer  "total_marks",       limit: 4
+    t.datetime "start_window_time"
+    t.datetime "end_window_time"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "timezone",          limit: 255
+  end
+
+  create_table "programming_tasks", force: :cascade do |t|
+    t.text     "task",          limit: 65535
+    t.text     "sample_input",  limit: 65535
+    t.text     "sample_output", limit: 65535
+    t.string   "hint",          limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "task_name",     limit: 255
+  end
+
   create_table "question_categories", force: :cascade do |t|
     t.string   "category_name", limit: 255
     t.datetime "created_at",                null: false
@@ -110,6 +168,17 @@ ActiveRecord::Schema.define(version: 20150408111926) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "test_cases", force: :cascade do |t|
+    t.integer  "programming_task_id", limit: 4
+    t.string   "input_file_name",     limit: 255
+    t.string   "output_file_name",    limit: 255
+    t.integer  "marks",               limit: 4
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "test_cases", ["programming_task_id"], name: "index_test_cases_on_programming_task_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -147,6 +216,13 @@ ActiveRecord::Schema.define(version: 20150408111926) do
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "privileges", "roles"
   add_foreign_key "privileges", "users"
+  add_foreign_key "programming_answer_sheets", "programming_exams"
+  add_foreign_key "programming_answer_sheets", "users"
+  add_foreign_key "programming_exam_colleges", "colleges"
+  add_foreign_key "programming_exam_colleges", "programming_exams"
+  add_foreign_key "programming_exam_tasks", "programming_exams"
+  add_foreign_key "programming_exam_tasks", "programming_tasks"
   add_foreign_key "questions", "question_categories"
+  add_foreign_key "test_cases", "programming_tasks"
   add_foreign_key "users", "colleges"
 end

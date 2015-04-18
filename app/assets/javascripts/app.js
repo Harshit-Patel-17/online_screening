@@ -1,1 +1,1 @@
-angular.module('onlineScreening', ['ui.bootstrap', 'restangular', 'ngGrid']);
+angular.module('onlineScreening', ['ui.bootstrap', 'restangular', 'ngGrid', 'ui.codemirror']);

@@ -1,0 +1,27 @@
+<div class="col-sm-4"></div>
+<div class="col-sm-4" ng-controller="ProgrammingExamNewCtrl">
+	<form method="post" action="/programming_exams" enctype="multipart/form-data" ng-submit="adjustTime()">
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Create Programming Exam</strong></div>
+			<div class="panel-body">
+				<ng-form>
+					<label>Exam Name</label>
+					<input class="form-control" type="text" name="programming_exam[exam_name]" placeholder="Exam name" required></input><br>
+					<label>Duration in Minutes</label>
+					<input class="form-control" type="number" name="programming_exam[duration_mins]" placeholder="Exam duration (mins)" required></input><br>
+					<label>Timezone</label>
+					<select class="form-control" ng-model="timezone" name="programming_exam[timezone]" ng-options="tz.timezone for tz in timezones track by tz.timezone">
+						<option value="" style="display: none">Select Timezone</options>
+					</select><br>
+					<label>Start Window Time</label>
+					<input class="form-control" ng-model="start_window_time" type="datetime-local" name="programming_exam[start_window_time]" placeholder="Start window time" required></input><br>
+					<label>End Window Time</label>
+					<input class="form-control" ng-model="end_window_time" type="datetime-local" name="programming_exam[end_window_time]" placeholder="End window time" required></input><br>
+				</ng-form>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-default" type="submit">Create</button>
+				<button class="btn btn-default" type="reset">Reset</button>
+			</div>
+	</form>
+</div>

@@ -1,0 +1,11 @@
+<div ng-controller="ProgrammingAnswerSheetIndexCtrl">
+	<select ng-model="programming_exam" ng-options="programming_exam.exam_name for programming_exam in programming_exams track by programming_exam.id">
+		<option value="" style="display: none">Select Programming Exam</option>
+	</select>
+	<input type="number" placeholder="Cut-off score" ng-model="cut_off"></input>
+	<button type="button" ng-click="getProgrammingAnswerSheets()">
+		<i class="glyphicon glyphicon-search"></i>
+	</button>
+	<div class="gridStyle" ng-grid="gridOptions">
+	</div>
+</div>

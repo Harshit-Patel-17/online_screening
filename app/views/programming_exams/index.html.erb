@@ -1,0 +1,17 @@
+<div ng-controller="ProgrammingExamIndexCtrl">
+	<div class="container-fluid">
+		<ul class="nav nav-tabs">
+			<li ng-class="{active: active_view == 'current_programming_exams'}">
+				<a ng-click="showCurrentProgrammingExams()">Current Programming Exams</a>
+			</li>
+			<li ng-class="{active: active_view == 'upcoming_programming_exams'}">
+				<a ng-click="showUpcomingProgrammingExams()">Upcoming Programming Exams</a>
+			</li>
+			<li ng-class="{active: active_view == 'past_programming_exams'}">
+				<a ng-click="showPastProgrammingExams()">Past Programming Exams</a>
+			</li>
+		</ul><br>
+	</div>
+	<div class="gridStyle" ng-grid="gridOptions">
+	</div>
+</div>

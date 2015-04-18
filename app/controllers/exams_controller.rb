@@ -142,10 +142,10 @@ class ExamsController < ApplicationController
 			format.html {
 				if is_done
 					flash[:notice] = message
-					url = "/exams/" + params[:id] + "/questions" if is_done
+					url = "/exams/" + params[:id] + "/questions"
 				else
 					flash[:alert] = message
-					url = "/exams/" + params[:id] + "/questions" unless is_done
+					url = "/exams/" + params[:id] + "/questions"
 				end
 				redirect_to url
 			}

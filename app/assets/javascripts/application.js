@@ -22,4 +22,5 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require codemirror
+//= require codemirror/modes/clike
 //= require_tree .

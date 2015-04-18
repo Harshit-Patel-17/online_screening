@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 	has_one :privilege, :dependent => :delete
 	has_one :role, through: :privilege
 	has_many :answer_sheets, :dependent => :delete_all
+  has_many :programming_answer_sheets, :dependent => :delete_all
 	belongs_to :college
 	
   # Include default devise modules. Others available are:
