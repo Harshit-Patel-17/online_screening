@@ -35,9 +35,13 @@
 					<div class="panel-body">
 						<strong>Source Code</strong>
 						<textarea ui-codemirror="codeOption" ng-model="programText"></textarea><br>
+						<div class="alert alert-warning">
+							<center>{{message}}</center>
+						</div>
 						<button type="button" class="btn btn-default" ng-click="saveProgram()">Save</button>
-						<button type="button" class="btn btn-default" ng-click="getStdin()">Run</button>
-						<button type="button" class="btn btn-default" ng-click="checkProgram()">Submit</button><hr>
+						<button type="button" class="btn btn-default" ng-click="getStdin()">Execute</button>
+						<button type="button" class="btn btn-default" ng-click="checkProgram()">Submit</button>
+						<hr>
 						<strong>Task</strong>
 						<p>{{programmingTask.task}}</p><br>
 						<strong>Sample Input</strong>

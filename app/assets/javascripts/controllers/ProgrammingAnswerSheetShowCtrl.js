@@ -8,6 +8,7 @@ angular.module('onlineScreening')
 	function($scope, $http, $timeout, $modal, $rest){
 		$scope.timer = {};
 		$scope.programmingTask = {};
+		$scope.message = "No activity";
 
 		$scope.countDown = function(){
 			$scope.timer.total_secs--;
@@ -61,35 +62,39 @@ angular.module('onlineScreening')
 
 		$scope.saveProgram = function(){
 			var params = {"programming_task_id": $scope.programmingTask.id, "program_text": $scope.programText};
+			$scope.message = "Saving...";
 			$rest.setRequestSuffix('.json');
 			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('save_program').post('', params)
 			.then(function(data){
-				
+				$scope.message = "Saved";
 			}, function(){
-				alert("Get programming task request failed.");
+				$scope.message = "Save failed!";
 			});
 		};
 
 		$scope.checkProgram = function(){
 			$scope.saveProgram();
+			$scope.message = "Submitting...";
 			var params = {"programming_task_id": $scope.programmingTask.id};
 			$rest.setRequestSuffix('.json');
 			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('check_program').post('', params)
 			.then(function(data){
-				alert(angular.toJson(data));
 				$scope.compilationLog = data.compilation_log;
+				$scope.message = "Successfully submitted"
 			}, function(){
-				alert("Check programming task request failed.");
+				$scope.message = "Submit failed!"
 			});
 		};
 
 		$scope.getStdin = function() {
+			$scope.saveProgram();
 	    	var modalInstance = $modal.open({
 	        	templateUrl: 'get_stdin.html',
 	        	controller: 'getStdinCtrl'
 	      	});
 
 	      	modalInstance.result.then(function(stdin) {
+	        	$scope.message = "Executing...";
 	        	var params = {"programming_task_id": $scope.programmingTask.id, "stdin": stdin};
 	        	$rest.setRequestSuffix('.json');
 				$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('run_program').post('', params)
@@ -97,8 +102,9 @@ angular.module('onlineScreening')
 					$scope.stdin = data.stdin;
 					$scope.stdout = data.stdout;
 					$scope.compilationLog = data.compilation_log;
+					$scope.message = "Execution complete";
 				}, function(){
-					alert("Run programming task request failed.");
+					$scope.message = "Execution failed"
 				});
 	      	}, function () {
 

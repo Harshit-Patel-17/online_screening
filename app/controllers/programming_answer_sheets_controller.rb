@@ -69,19 +69,10 @@ class ProgrammingAnswerSheetsController < ApplicationController
 
 	def get_program
 		programming_answer_sheet = ProgrammingAnswerSheet.find params[:id]
-		timer_active = programming_answer_sheet.end_time >= DateTime.now and programming_answer_sheet.start_time <= DateTime.now
-		user_valid = current_user.id == programming_answer_sheet.user_id
-		ip_correct = programming_answer_sheet.start_test_ip == request.remote_ip
-		if timer_active and user_valid and ip_correct
-			program_text = programming_answer_sheet.get_program(params[:programming_task_id])
-			message = 'success'
-		else
-			program_text = ""
-			message = 'Request denied'
-		end
+		program_text = programming_answer_sheet.get_program(params[:programming_task_id])
 		respond_to do |format|
 			format.html {}
-			format.json {render json: {reply: message, programText: program_text}}
+			format.json {render json: {programText: program_text}}
 		end
 	end
 
@@ -123,6 +114,10 @@ class ProgrammingAnswerSheetsController < ApplicationController
 			format.html {render json: {reply: message}}
 			format.json {render json: {reply: message}}
 		end
+	end
+
+	def review
+		@programming_answer_sheet = ProgrammingAnswerSheet.find params[:id]
 	end
 
 	def time_up

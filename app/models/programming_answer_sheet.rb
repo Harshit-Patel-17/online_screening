@@ -48,7 +48,7 @@ class ProgrammingAnswerSheet < ActiveRecord::Base
 	end
 
 	def save_program programming_task_id, program_text
-		program_text = program_text.gsub(/\\/, '\\' => '\\\\').inspect
+		program_text = program_text.strip.gsub(/\\/, '\\' => '\\\\').inspect
 		puts program_text
 		system("echo '#{@@password}' | sudo -S touch #{@@programs_path}/#{self.id}/#{programming_task_id}.cpp")
 		system("echo #{program_text} | sudo tee #{@@programs_path}/#{self.id}/#{programming_task_id}.cpp")

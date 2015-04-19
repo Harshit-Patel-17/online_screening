@@ -1,0 +1,31 @@
+<div ng-controller="ProgrammingAnswerSheetReviewCtrl" ng-init="init(<%= @programming_answer_sheet.id %>)">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Programming Tasks</strong>
+					</div>
+					<div class="panel-body">
+						<ul class="nav nav-pills nav-stacked">
+							<li ng-class="{'active': programmingTaskId == programming_task_id}" ng-repeat="programming_task_id in programmingAnswerSheet.programming_tasks track by $index">
+								<a ng-click="getProgramText(programming_task_id)">{{$index+1}}. {{programmingAnswerSheet.task_names[$index]}}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-9">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Code</strong>
+					</div>
+					<div class="panel-body">
+						<textarea ui-codemirror="codeOption" ng-model="programText"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

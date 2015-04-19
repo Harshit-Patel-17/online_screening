@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   resources :programming_tasks
 
   namespace "programming_exams" do
+    get ':id/review', action: 'review', as: 'review'
     get 'my_exams', action: 'my_exams', as: 'my_exams'
     get 'timezones', action: 'timezones', as: 'timezones'
     post ':id/programming_tasks', action: 'set_programming_tasks', as: 'set_programming_tasks'
