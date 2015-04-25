@@ -8,7 +8,36 @@ angular.module('onlineScreening')
 	function($scope, $http, $timeout, $modal, $rest){
 		$scope.timer = {};
 		$scope.programmingTask = {};
+		$scope.language = "c++";
 		$scope.message = "No activity";
+
+		$scope.codeOption = {
+		    lineNumbers: true,
+		    indentWithTabs: true,
+		    mode: "text/x-c++src",
+		    
+		};
+
+		$scope.compilationLogOption = {
+		    lineNumbers: true,
+		    indentWithTabs: true,
+		    lineWrapping: true,
+		    readOnly: "nocursor",
+		    viewportMargin: Infinity,
+		    onLoad: function(_editor){
+		    	_editor.setSize(null, "50%");
+		    }
+		};
+
+		$scope.ioOption = {
+		    lineNumbers: true,
+		    indentWithTabs: true,
+		    readOnly: "nocursor",
+		    viewportMargin: Infinity,
+		    onLoad: function(_editor){
+		    	_editor.setSize(null, "50%");
+		    }
+		};
 
 		$scope.countDown = function(){
 			$scope.timer.total_secs--;
@@ -51,7 +80,7 @@ angular.module('onlineScreening')
 				alert("Get programming task request failed.");
 			});
 
-			var params = {"programming_task_id": programming_task_id};
+			var params = {"programming_task_id": programming_task_id, "language": $scope.language};
 			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('get_program').get(params)
 			.then(function(data){
 				$scope.programText = data.programText;
@@ -61,7 +90,7 @@ angular.module('onlineScreening')
 		};
 
 		$scope.saveProgram = function(){
-			var params = {"programming_task_id": $scope.programmingTask.id, "program_text": $scope.programText};
+			var params = {"programming_task_id": $scope.programmingTask.id, "program_text": $scope.programText, "language": $scope.language};
 			$scope.message = "Saving...";
 			$rest.setRequestSuffix('.json');
 			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('save_program').post('', params)
@@ -72,10 +101,9 @@ angular.module('onlineScreening')
 			});
 		};
 
-		$scope.checkProgram = function(){
-			$scope.saveProgram();
+		$scope.checkCppProgram = function(){
 			$scope.message = "Submitting...";
-			var params = {"programming_task_id": $scope.programmingTask.id};
+			var params = {"programming_task_id": $scope.programmingTask.id, "language": $scope.language};
 			$rest.setRequestSuffix('.json');
 			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('check_program').post('', params)
 			.then(function(data){
@@ -86,21 +114,59 @@ angular.module('onlineScreening')
 			});
 		};
 
-		$scope.getStdin = function() {
-			$scope.saveProgram();
-	    	var modalInstance = $modal.open({
-	        	templateUrl: 'get_stdin.html',
-	        	controller: 'getStdinCtrl'
+		$scope.checkJavaProgram = function(){
+			var modalInstance = $modal.open({
+	        	templateUrl: 'submit_java_program.html',
+	        	controller: 'modalCtrl'
 	      	});
 
-	      	modalInstance.result.then(function(stdin) {
+	      	modalInstance.result.then(function(input) {
+	        	$scope.message = "Submitting...";
+				var params = {"programming_task_id": $scope.programmingTask.id, "input": input, "language": $scope.language};
+				$rest.setRequestSuffix('.json');
+				$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('check_program').post('', params)
+				.then(function(data){
+					$scope.compilationLog = data.compilation_log;
+					$scope.message = "Successfully submitted"
+				}, function(){
+					$scope.message = "Submit failed!"
+				});
+	      	}, function () {
+
+	      	});
+		};
+
+		$scope.checkProgram = function(){
+			$scope.saveProgram();
+			if($scope.language == "c++")
+				$scope.checkCppProgram();
+			else if($scope.language == "java")
+				$scope.checkJavaProgram();
+		};
+
+		$scope.getInput = function() {
+			$scope.saveProgram();
+			var modalInstance;
+			if($scope.language == "c++")
+		    	modalInstance = $modal.open({
+		        	templateUrl: 'get_cpp_input.html',
+		        	controller: 'modalCtrl'
+		      	});
+		    else if($scope.language == "java")
+		    	modalInstance = $modal.open({
+		        	templateUrl: 'get_java_input.html',
+		        	controller: 'modalCtrl'
+		      	});
+
+	      	modalInstance.result.then(function(input) {
 	        	$scope.message = "Executing...";
-	        	var params = {"programming_task_id": $scope.programmingTask.id, "stdin": stdin};
+	        	var params = {"programming_task_id": $scope.programmingTask.id, "input": input, "language": $scope.language};
 	        	$rest.setRequestSuffix('.json');
 				$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('run_program').post('', params)
 				.then(function(data){
 					$scope.stdin = data.stdin;
 					$scope.stdout = data.stdout;
+					$scope.stderr = data.stderr;
 					$scope.compilationLog = data.compilation_log;
 					$scope.message = "Execution complete";
 				}, function(){
@@ -111,42 +177,31 @@ angular.module('onlineScreening')
 	      	});
 	    };
 
-		$scope.codeOption = {
-		    lineNumbers: true,
-		    indentWithTabs: true,
-		    mode: "text/x-c++src",
-		    theme: "monokai"
+		$scope.changeLanguage = function(lang){
+			$scope.language = lang;
+			if($scope.language == "c++")
+				$scope.codeOption.mode = "text/x-c++src";
+			else if($scope.language == "java")
+				$scope.codeOption.mode = "text/x-java";
+			var params = {"programming_task_id": $scope.programmingTask.id, "language": $scope.language};
+			$rest.one('programming_answer_sheets', $scope.programmingAnswerSheet.id).one('get_program').get(params)
+			.then(function(data){
+				$scope.programText = data.programText;
+			}, function(){
+				alert("Get program text request failed");
+			});
 		};
 
-		$scope.compilationLogOption = {
-		    lineNumbers: true,
-		    indentWithTabs: true,
-		    lineWrapping: true,
-		    readOnly: "nocursor",
-		    viewportMargin: Infinity,
-		    onLoad: function(_editor){
-		    	_editor.setSize(null, "50%");
-		    }
-		};
-
-		$scope.ioOption = {
-		    lineNumbers: true,
-		    indentWithTabs: true,
-		    readOnly: "nocursor",
-		    viewportMargin: Infinity,
-		    onLoad: function(_editor){
-		    	_editor.setSize(null, "50%");
-		    }
-		};
 	}]);
 
 angular.module('onlineScreening')
-.controller('getStdinCtrl', [
+.controller('modalCtrl', [
   	'$scope',
   	'$modalInstance',
   	function($scope,$modalInstance){
+  		$scope.input = {};
   		$scope.ok = function () {
-     		$modalInstance.close($scope.stdin);
+     		$modalInstance.close($scope.input);
     	};
 
 	    $scope.cancel = function () {

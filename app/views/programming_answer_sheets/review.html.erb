@@ -8,8 +8,8 @@
 					</div>
 					<div class="panel-body">
 						<ul class="nav nav-pills nav-stacked">
-							<li ng-class="{'active': programmingTaskId == programming_task_id}" ng-repeat="programming_task_id in programmingAnswerSheet.programming_tasks track by $index">
-								<a ng-click="getProgramText(programming_task_id)">{{$index+1}}. {{programmingAnswerSheet.task_names[$index]}}</a>
+							<li ng-class="{'active': pid == programming_task_id}" ng-repeat="pid in programmingAnswerSheet.programming_tasks track by $index">
+								<a ng-click="changeProgram(pid)">{{$index+1}}. {{programmingAnswerSheet.task_names[$index]}}</a>
 							</li>
 						</ul>
 					</div>
@@ -20,6 +20,17 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<strong>Code</strong>
+					</div>
+					<div class="container-fluid">
+						<br>
+						<ul class="nav nav-tabs">
+							<li ng-class="{active: language == 'c++'}">
+								<a ng-click="changeLanguage('c++')">C++</a>
+							</li>
+							<li ng-class="{active: language == 'java'}">
+								<a ng-click="changeLanguage('java')">Java</a>
+							</li>
+						</ul>
 					</div>
 					<div class="panel-body">
 						<textarea ui-codemirror="codeOption" ng-model="programText"></textarea>

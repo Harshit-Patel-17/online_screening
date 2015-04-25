@@ -34,12 +34,24 @@
 					</div>
 					<div class="panel-body">
 						<strong>Source Code</strong>
-						<textarea ui-codemirror="codeOption" ng-model="programText"></textarea><br>
+						<div class="container-fluid">
+							<ul class="nav nav-tabs">
+								<li ng-class="{active: language == 'c++'}">
+									<a ng-click="changeLanguage('c++')">C++</a>
+								</li>
+								<li ng-class="{active: language == 'java'}">
+									<a ng-click="changeLanguage('java')">Java</a>
+								</li>
+							</ul><br>
+						</div>
+						<div style="border: 1px solid #DDD">
+							<textarea ui-codemirror="codeOption" ng-model="programText"></textarea>
+						</div><br>
 						<div class="alert alert-warning">
 							<center>{{message}}</center>
 						</div>
 						<button type="button" class="btn btn-default" ng-click="saveProgram()">Save</button>
-						<button type="button" class="btn btn-default" ng-click="getStdin()">Execute</button>
+						<button type="button" class="btn btn-default" ng-click="getInput()">Execute</button>
 						<button type="button" class="btn btn-default" ng-click="checkProgram()">Submit</button>
 						<hr>
 						<strong>Task</strong>
@@ -77,17 +89,60 @@
 						<textarea ui-codemirror="ioOption" ng-model="stdout"></textarea>
 					</div>
 				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Standard Error</strong>
+					</div>
+					<div class="panel-body">
+						<textarea ui-codemirror="ioOption" ng-model="stderr"></textarea>
+					</div>
+				</div>
 			</div>	
 		</div>
 	</div>
 </div>
 
-<script type="text/ng-template" id="get_stdin.html">
+<script type="text/ng-template" id="get_cpp_input.html">
 	<div class="modal-header">
-	    <h3 class="modal-title">Standard Input</h3>
+	    <h3 class="modal-title">Program Input</h3>
 	</div>
 	<div class="modal-body">
-	    <textarea class="form-control" ng-model="stdin"></textarea>
+		<label>Standard Input</label>
+	    <textarea class="form-control" ng-model="input.stdin"></textarea>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="ok()">OK</button>
+	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="get_java_input.html">
+	<div class="modal-header">
+	    <h3 class="modal-title">Program Input</h3>
+	</div>
+	<div class="modal-body">
+		<ng-form>
+			<label>Class name</label>
+			<input type="text" class="form-control" ng-model="input.class" required></input><br>
+			<label>Standard Input</label>
+		    <textarea class="form-control" ng-model="input.stdin"></textarea>
+		</ng-form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="ok()">OK</button>
+	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="submit_java_program.html">
+	<div class="modal-header">
+	    <h3 class="modal-title">Program Input</h3>
+	</div>
+	<div class="modal-body">
+		<ng-form>
+			<label>Class name</label>
+			<input type="text" class="form-control" ng-model="input.class" required></input>
+		</ng-form>
 	</div>
 	<div class="modal-footer">
 	    <button class="btn btn-primary" ng-click="ok()">OK</button>

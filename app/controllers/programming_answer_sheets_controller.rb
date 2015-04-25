@@ -56,7 +56,7 @@ class ProgrammingAnswerSheetsController < ApplicationController
 		timer_active = programming_answer_sheet.end_time >= DateTime.now and programming_answer_sheet.start_time <= DateTime.now
 		user_valid = current_user.id == programming_answer_sheet.user_id
 		ip_correct = programming_answer_sheet.start_test_ip == request.remote_ip
-		if timer_active and user_valid and ip_correct and programming_answer_sheet.save_program(params[:programming_task_id], params[:program_text])
+		if timer_active and user_valid and ip_correct and programming_answer_sheet.save_program(params[:programming_task_id], params[:program_text], params[:language])
 			message = 'program successfully saved'
 		else
 			message = 'Error in saving the program'
@@ -69,7 +69,7 @@ class ProgrammingAnswerSheetsController < ApplicationController
 
 	def get_program
 		programming_answer_sheet = ProgrammingAnswerSheet.find params[:id]
-		program_text = programming_answer_sheet.get_program(params[:programming_task_id])
+		program_text = programming_answer_sheet.get_program(params[:programming_task_id], params[:language])
 		respond_to do |format|
 			format.html {}
 			format.json {render json: {programText: program_text}}
@@ -78,7 +78,7 @@ class ProgrammingAnswerSheetsController < ApplicationController
 
 	def check_program
 		programming_answer_sheet = ProgrammingAnswerSheet.find(params[:id])
-		result = programming_answer_sheet.check_program!(params[:programming_task_id])
+		result = programming_answer_sheet.check_program!(params[:programming_task_id], params[:input], params[:language])
 		respond_to do |format|
 			format.json{ render json: result }
 		end
@@ -86,7 +86,7 @@ class ProgrammingAnswerSheetsController < ApplicationController
 
 	def run_program
 		programming_answer_sheet = ProgrammingAnswerSheet.find(params[:id])
-		result = programming_answer_sheet.run_program(params[:programming_task_id], params[:stdin])
+		result = programming_answer_sheet.run_program(params[:programming_task_id], params[:input], params[:language])
 		respond_to do |format|
 			format.json{ render json: result }
 		end
