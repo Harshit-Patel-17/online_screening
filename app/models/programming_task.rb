@@ -3,7 +3,7 @@ class ProgrammingTask < ActiveRecord::Base
 	has_many :programming_exam_tasks
 	has_many :programming_exams, :through => :programming_exam_tasks
 
-	@@sandbox_path = "online_judge/sandbox_C"
+	@@sandbox_path = "/sandbox"
 	@@test_input_directory = @@sandbox_path + "/test/input"
 	@@test_output_directory = @@sandbox_path + "/test/output"
 	@@password = "infibeam"

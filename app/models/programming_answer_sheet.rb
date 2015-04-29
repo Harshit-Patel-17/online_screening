@@ -4,7 +4,7 @@ class ProgrammingAnswerSheet < ActiveRecord::Base
 	serialize :programming_tasks, JSON
 	serialize :marks, JSON
 
-	@@sandbox_path = "online_judge/sandbox_C"
+	@@sandbox_path = "/sandbox"
 	@@programs_path = @@sandbox_path + "/programs"
 	@@admin_programs_path = @@sandbox_path + "/admin_programs"
 	@@test_output_directory = @@sandbox_path + "/test/output"
@@ -85,7 +85,7 @@ class ProgrammingAnswerSheet < ActiveRecord::Base
 				input_file = "../test/input/#{programming_task_id}/#{test_case.input_file_name}"
 				output_file = "../programs/#{self.id}/#{lang}/stdout"
 				error_file = "../programs/#{self.id}/#{lang}/stderr"
-				enqueue_program_for_execution(programming_task_id, lang, input_file, output_file, input)
+				enqueue_program_for_execution(programming_task_id, lang, input_file, output_file, error_file, input)
 				#system("echo '../programs/#{self.id}/#{lang}/#{programming_task_id}.out ../test/input/#{programming_task_id}/#{test_case.input_file_name} ../programs/#{self.id}/#{lang}/stdout' | sudo tee -a #{@@admin_programs_path}/job_queue")
 				#system("echo '#{@@password}' | sudo -S cat #{@@programs_path}/#{self.id}/output")
 				begin
@@ -198,7 +198,7 @@ class ProgrammingAnswerSheet < ActiveRecord::Base
 
 	def enqueue_program_for_execution programming_task_id, lang, input_file, output_file, error_file, input
 		if lang == 'c++'
-			system("echo '../programs/#{self.id}/#{lang}/#{programming_task_id}.out #{input_file} #{output_file} #{error_file}' | sudo tee -a #{@@admin_programs_path}/job_queue")
+			system("echo '../programs/#{self.id}/#{lang}/#{programming_task_id}.out #{input_file} #{output_file}' | sudo tee -a #{@@admin_programs_path}/job_queue")
 		elsif lang == 'java'
 			puts input[:class]
 			system("echo '/usr/bin/java -cp ../programs/#{self.id}/#{lang}/ #{input[:class]} #{input_file} #{output_file}' | sudo tee -a #{@@admin_programs_path}/job_queue")

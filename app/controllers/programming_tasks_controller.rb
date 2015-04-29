@@ -19,6 +19,7 @@ class ProgrammingTasksController < ApplicationController
 		respond_to do |format|
 			format.json {
 				programming_task = ProgrammingTask.set(params[:programming_task], params[:test_inputs], params[:test_outputs], params[:test_marks])
+				redirect_to programming_tasks_path
 			}
 		end
 	end
