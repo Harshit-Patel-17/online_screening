@@ -1,0 +1,22 @@
+<div ng-controller="ProgrammingExamShowCtrl" ng-init="init(<%= @programming_exam.id %>)">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Exam Details</strong></div>
+					<div class="panel-body">
+						<label>Exam Name</label>
+						<p>{{programming_exam.exam_name}}</p><hr>
+						<label>Start Window Time (SWT)</label>
+						<p>{{programming_exam.start_window_time}}</p><hr>
+						<label>End Window Time (EWT)</label>
+						<p>{{programming_exam.end_window_time}}</p><hr>
+						<label>Duration</label>
+						<p>{{programming_exam.duration_mins}} minutes</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
