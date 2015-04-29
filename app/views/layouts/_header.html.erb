@@ -13,7 +13,7 @@
       <ul class="nav navbar-nav">
         <% if can? :give, :exam %>
         <li>
-        	<%= link_to "My Exams", exams_my_exams_path, :method => "get" %>
+          <%= link_to "My Exams", exams_my_exams_path, :method => "get" %>
         </li>
         <li>
           <%= link_to "My Programming Exams", programming_exams_my_exams_path, :method => "get" %>
@@ -26,31 +26,51 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Exams <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-          	<li><%= link_to "Index", exams_path, :method => "get" %></li>
-          	<li class="divider"></li>
+            <li><%= link_to "Index", exams_path, :method => "get" %></li>
+            <li class="divider"></li>
             <li><%= link_to "New Exam", new_exam_path, :method => "get" %></li>
             <li class="divider"></li>
             <li><%= link_to "Results", answer_sheets_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Change User IP", answer_sheets_change_ip_path, :method => "get" %></li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Questions <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-          	<li><%= link_to "Index", questions_path, :method => "get" %></li>
-          	<li class="divider"></li>
+            <li><%= link_to "Index", questions_path, :method => "get" %></li>
+            <li class="divider"></li>
             <li><%= link_to "New Question", new_question_path, :method => "get" %></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programming Exams <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><%= link_to "Index", programming_exams_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "New Programming Exam", new_programming_exam_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Results", programming_answer_sheets_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Change User IP", programming_answer_sheets_change_ip_path, :method => "get" %></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programming Tasks <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><%= link_to "Index", programming_tasks_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "New Programming Task", new_programming_task_path, :method => "get" %></li>
           </ul>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Users <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-          	<li><%= link_to "Index", users_path, :method => "get" %></li>
-          	<li class="divider"></li>
-          	<li><%= link_to "New Admin", users_admin_new_path, :method => "get" %></li>
-          	<li class="divider"></li>
-            <li><%= link_to "New Users", users_mass_new_path, :method => "get" %></li>
+            <li><%= link_to "Index", users_path, :method => "get" %></li>
             <li class="divider"></li>
-            <li><%= link_to "Change User IP", answer_sheets_change_ip_path, :method => "get" %></li>
+            <li><%= link_to "New Admin", users_admin_new_path, :method => "get" %></li>
+            <li class="divider"></li>
+            <li><%= link_to "New Users", users_mass_new_path, :method => "get" %></li>
           </ul>
         </li>
         <li class="dropdown">
