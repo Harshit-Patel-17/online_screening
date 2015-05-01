@@ -1,4 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  before_action :authenticate_user!
+  before_action :authorize_admin
   before_filter :configure_sign_up_params, only: [:create, :admin_create]
 # before_filter :configure_account_update_params, only: [:update]
   
@@ -140,4 +142,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  private
+
+  def authorize_admin
+    authorize! :manage, :site, :message => "Only admin can access this url."
+  end
 end

@@ -6,6 +6,17 @@ angular.module('onlineScreening')
 	function($scope, $http, $rest){
 		$scope.init = function(id){
 			$scope.programming_exam_id = id;
+
+			$rest.setRequestSuffix('.json');
+			$rest.one('programming_exams', $scope.programming_exam_id).get()
+			.then(function(data){
+				$scope.programming_exam = data.programming_exam;
+				$scope.programming_exam.start_window_time = (new Date($scope.programming_exam.start_window_time)).toLocaleString();
+				$scope.programming_exam.end_window_time =( new Date($scope.programming_exam.end_window_time)).toLocaleString();
+			}, function(){
+				alert("Get programming exam request failed.");
+			});
+			
 			$rest.one('programming_exams', $scope.programming_exam_id).one('programming_tasks.json').get()
 			.then(function(data){
 				$scope.programming_tasks = data.programming_tasks;

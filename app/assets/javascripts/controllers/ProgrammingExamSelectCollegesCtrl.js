@@ -5,8 +5,19 @@ angular.module('onlineScreening')
 	'Restangular',
 	function($scope, $http, $rest){
 		$scope.init = function(id){
-			$scope.college_id = id;
-			$rest.one('programming_exams', $scope.college_id).one('colleges.json').get()
+			$scope.programming_exam_id = id;
+
+			$rest.setRequestSuffix('.json');
+			$rest.one('programming_exams', $scope.programming_exam_id).get()
+			.then(function(data){
+				$scope.programming_exam = data.programming_exam;
+				$scope.programming_exam.start_window_time = (new Date($scope.programming_exam.start_window_time)).toLocaleString();
+				$scope.programming_exam.end_window_time =( new Date($scope.programming_exam.end_window_time)).toLocaleString();
+			}, function(){
+				alert("Get programming exam request failed.");
+			});
+
+			$rest.one('programming_exams', $scope.programming_exam_id).one('colleges.json').get()
 			.then(function(data){
 				$scope.colleges = data.colleges;
 				$scope.selected_colleges = data.selected_colleges
