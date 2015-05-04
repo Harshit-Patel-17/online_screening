@@ -1,6 +1,10 @@
-<center><h1>Select Colleges</h1></center>
 <div ng-controller="ExamSelectCollegesCtrl" ng-init="init(<%= @exam.id %>)">
-	<center><h3>{{exam.exam_name}}</h3></center>
+	<div class="page-header text-center">
+		<h1>
+			Select Colleges<br>
+			<small>{{exam.exam_name}}</small>
+		</h1>
+	</div>	
 	<form action="" method="post" enctype="application/json">
 		<div class="gridStyle" ng-grid="gridOptions">
 		</div>

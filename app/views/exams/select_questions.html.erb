@@ -1,9 +1,14 @@
-<center><h1>Select Questions</h1></center>
 <div ng-controller="ExamSelectQuestionsCtrl" ng-init="init(<%= @exam.id %>)">
-	<center><h3>{{exam.exam_name}}</h3></center>
+	<div class="page-header text-center">
+		<h1>
+			Select Questions<br>
+			<small>{{exam.exam_name}}</small>
+		</h1>
+	</div>	
 	<form action="" method="post" enctype="application/json">
 		<div class="container-fluid">
 			<div class="row">
+				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
 					<div class="panel panel-default">
 						<div class="panel-heading"><strong>Select Category</strong></div>

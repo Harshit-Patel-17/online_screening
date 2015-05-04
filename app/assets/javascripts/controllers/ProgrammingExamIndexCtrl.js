@@ -38,6 +38,9 @@ angular.module('onlineScreening')
 				else
 					$scope.upcoming_programming_exams.push($scope.programming_exams[i]);
 			}
+			$scope.total_current_programming_exams = $scope.current_programming_exams.length;
+			$scope.total_upcoming_programming_exams = $scope.upcoming_programming_exams.length;
+			$scope.total_past_programming_exams = $scope.past_programming_exams.length;
 		};
 
 		$scope.showCurrentProgrammingExams = function(){

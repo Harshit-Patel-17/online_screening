@@ -1,18 +1,23 @@
-<center><h1>Programming Exams</h1></center>
+<div class="page-header text-center">
+	<h1>Programming Exams</h1>
+</div>
 <div ng-controller="ProgrammingExamIndexCtrl">
-	<div class="container-fluid">
-		<ul class="nav nav-tabs">
-			<li ng-class="{active: active_view == 'current_programming_exams'}">
-				<a ng-click="showCurrentProgrammingExams()">Current Programming Exams</a>
-			</li>
-			<li ng-class="{active: active_view == 'upcoming_programming_exams'}">
-				<a ng-click="showUpcomingProgrammingExams()">Upcoming Programming Exams</a>
-			</li>
-			<li ng-class="{active: active_view == 'past_programming_exams'}">
-				<a ng-click="showPastProgrammingExams()">Past Programming Exams</a>
-			</li>
-		</ul><br>
-	</div>
+	<div class="container-fluid text-center">
+		<div class="btn-group">
+			<button type="button" ng-class="{btn: true, 'btn-default': true, 'btn-primary': active_view == 'current_programming_exams'}" ng-click="showCurrentProgrammingExams()">
+				Current Exams
+				<span class="badge">{{total_current_programming_exams}}</span>
+			</button>
+			<button type="button" ng-class="{btn: true, 'btn-default': true, 'btn-primary': active_view == 'upcoming_programming_exams'}" ng-click="showUpcomingProgrammingExams()">
+				Upcoming Exams
+				<span class="badge">{{total_upcoming_programming_exams}}</span>
+			</button>
+			<button type="button" ng-class="{'btn': true, 'btn-default': true, 'btn-primary': active_view == 'past_programming_exams'}" ng-click="showPastProgrammingExams()">
+				Past Exams
+				<span class="badge">{{total_past_programming_exams}}</span>
+			</button>
+		</div>
+	</div><br>
 	<div class="gridStyle" ng-grid="gridOptions">
 	</div>
 </div>

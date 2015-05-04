@@ -1,4 +1,6 @@
-<center><h1>Answer Sheets</h1></center>
+<div class="page-header text-center">
+	<h1>Answer Sheets</h1>
+</div>
 <div ng-controller="AnswerSheetIndexCtrl">
 	<select ng-model="exam" ng-options="exam.exam_name for exam in exams track by exam.id">
 		<option value="" style="display: none">Select Exam</option>

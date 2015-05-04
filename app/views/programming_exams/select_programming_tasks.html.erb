@@ -1,6 +1,10 @@
-<center><h1>Select Programming Tasks</h1></center>
 <div ng-controller="ProgrammingExamSelectProgrammingTasksCtrl" ng-init="init(<%= @programming_exam.id %>)">
-	<center><h3>{{programming_exam.exam_name}}</h3></center>
+	<div class="page-header text-center">
+		<h1>
+			Select Programming Tasks<br>
+			<small>{{programming_exam.exam_name}}</small>
+		</h1>
+	</div>
 	<form action="" method="post" enctype="application/json">
 		<div class="gridStyle" ng-grid="gridOptions">
 		</div>
